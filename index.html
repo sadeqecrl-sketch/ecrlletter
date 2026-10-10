@@ -767,6 +767,7 @@ function tableHtml(items){
   return'<table style="border-collapse:collapse;font-family:Calibri,Segoe UI,sans-serif;font-size:11pt"><thead><tr>'+HEAD.map(function(h){return'<th style="'+th+'">'+esc(h)+'</th>'}).join("")+'</tr></thead><tbody>'+items.map(function(e){return'<tr>'+rowCells(e).map(function(v){return'<td style="'+td+'">'+esc(v)+'</td>'}).join("")+'</tr>'}).join("")+'</tbody></table>'
 }
 function waEntries(c){if(contact(c.name).ltype==="proposal")return["*Company / Group:* "+c.name,""].concat(c.items.map(function(e,i){return(i+1)+". "+(e.cc||e.cn)+" – Fees (without VAT): "+fmtFee(e.fee)})).join("\n");
+  if(c.items.some(function(e){return key(e.cn)!==key(c.name)})){var bb=c.items[0],so=["*Bank:* "+(bb.bn||""),"*Branch:* "+(bb.br||""),""];c.items.forEach(function(e,i){so.push((i+1)+". *"+e.cn+"*"+(e.rt?" \u2013 "+e.rt:"")+" \u2013 Valid till: "+shortDate(e.vt))});return so.join("\n")}
   var multi=c.items.length>1,o=["*Client Name:* "+c.name];
   c.items.forEach(function(e,i){if(i>0||multi)o.push("");if(multi)o.push("*Entry "+(i+1)+"*");o.push("*Bank:* "+e.bn,"*Branch:* "+e.br);if(e.rt)o.push("*Rating Type:* "+e.rt);o.push("*Valid Till:* "+shortDate(e.vt))});
   return o.join("\n")
@@ -776,7 +777,7 @@ function build(kind){
   var c=cur();if(!c)return null;
   var dates=c.items.map(function(e){return e.vt}).filter(Boolean).sort(),first=dates[0]||"",today=todayKey();
   var base={client_name:c.name,date:fmt(today),sender:S.sender,valid_till:longDate(first),status:first&&first<today?"expired on":"will expire on"};
-  var multi=c.items.filter(function(e,i,a){return a.findIndex(function(x){return key(x.cn)===key(e.cn)})===i}).length>1,xe=c.items.filter(function(e){return e.vt&&e.vt<today}).length,xu=c.items.filter(function(e){return e.vt&&e.vt>=today}).length,MS=xe&&!xu?"has expired":xu&&!xe?"will expire soon":xe?"has expired or will expire soon":"is due for renewal";
+  var multi=c.items.filter(function(e,i,a){return a.findIndex(function(x){return key(x.cn)===key(e.cn)})===i}).length>1||(kind==="wa"&&c.items.some(function(e){return key(e.cn)!==key(c.name)})),xe=c.items.filter(function(e){return e.vt&&e.vt<today}).length,xu=c.items.filter(function(e){return e.vt&&e.vt>=today}).length,MS=xe&&!xu?"has expired":xu&&!xe?"will expire soon":xe?"has expired or will expire soon":"is due for renewal";
   function mt(t){return multi?String(t).replace(/validity for \{\{client_name\}\}\s+\{\{status\}\}\s+\{\{valid_till\}\}\./,"validity "+MS+". For your concern, we are sharing the client details below for your perusal."):t}
   var pc=contact(c.name),pt=pc.mdt==="__o"?(pc.mdo||""):(pc.mdt||"");
   base.ref_no=pc.ref||"";base.ref_line=pc.ref?"Ref: "+pc.ref:"";base.md_name=pc.md||"";base.md_title=pt;base.company_name=c.name;base.address=pc.addr||"";
@@ -2868,7 +2869,7 @@ function tpl(){dl("clients-template.csv",toCsv([["Client name","Bank name","Bran
 /* ---- build UI ---- */
 var V=document.createElement("div");V.className="view";V.id="v-board";V.hidden=true;
 V.innerHTML='<div class="card"><div class="srow"><h2>Client board</h2><span class="toast" id="bdMsg"></span></div>'
-+'<div class="bar" style="margin:8px 0;flex-wrap:wrap"><button class="pri" id="bdImp" type="button">Import Excel</button><button id="bdExp" type="button">Export CSV</button><button id="bdUndo" type="button" hidden>Undo last import</button><button id="bdAll" type="button">Select all shown</button><label class="cmb" title="Make one email or letter for each bank and branch instead of one per client"><input type="checkbox" id="bdComb"> One email / letter per bank &amp; branch</label></div>'
++'<div class="bar" style="margin:8px 0;flex-wrap:wrap"><button class="pri" id="bdImp" type="button">Import Excel</button><button id="bdExp" type="button">Export CSV</button><button id="bdUndo" type="button" hidden>Undo last import</button><button id="bdAll" type="button">Select all shown</button><label class="cmb" title="Policy: clients with the same bank and the same branch go together in one letter, email or WhatsApp message (clients shown in a table)"><input type="checkbox" id="bdComb"> Policy: one letter / email / WhatsApp per bank &amp; branch</label></div>'
 +'<div class="bbar"><label>Group by <select id="bdBy"><option value="bank">Bank name</option><option value="branch">Branch name</option><option value="vt">Valid till</option><option value="js">Job status</option><option value="none">No grouping</option></select></label>'
 +'<label>Sort by <select id="bdSort"><option value="vt">Valid till</option><option value="cn">Client name</option><option value="bn">Bank</option><option value="br">Branch</option><option value="js">Job status</option></select></label>'
 +'<label>Bank <select id="bdBank"></select></label><label>Branch <select id="bdBr"></select></label>'
@@ -2986,6 +2987,15 @@ badge();
 #d_bulk .hb svg{width:16px;height:16px}
 #d_bulk .hb[aria-pressed=true]{background:var(--sel);color:var(--brand);border-color:var(--brand)}
 #d_bulk .hb[disabled]{opacity:.4;cursor:default}
+#d_bulk .gsw{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 8px;font-size:14px;cursor:pointer}
+#d_bulk .gsw input{width:18px;height:18px;margin:0}
+#d_bulk .bkb td{background:var(--rail);font-weight:600}
+#d_bulk .bkr td{border-bottom:0;padding-bottom:2px}
+#d_bulk .bkr .brn{font-weight:600;padding-left:14px}
+#d_bulk .bkc td{border-bottom:0;padding:2px 8px 2px 8px;font-size:13px}
+#d_bulk .bkc td:nth-child(2){padding-left:30px}
+#d_bulk .bkc.end td{border-bottom:1px solid var(--line);padding-bottom:8px}
+#d_bulk .bkc .nm{color:var(--warn)}
 #bulkPrint{display:none}
 body.bulkprint>*:not(#bulkPrint){display:none!important}
 body.bulkprint #bulkPrint{display:block;background:#fff;color:#000}
@@ -2996,7 +3006,7 @@ body.bulkprint #bulkPrint{display:block;background:#fff;color:#000}
 </style>
 <script>
 (function(){
-var CB={mode:"bb",q:"",bank:"",br:"",sel:{},shut:{},comb:false,bcc:true},L=window.LDc,CHN={email:"Email",wa:"WhatsApp",letter:"Letter"},Q=null;try{CB.comb=localStorage.getItem("ld_comb")==="1"}catch(e){}
+var CB={mode:"bb",q:"",bank:"",br:"",sel:{},shut:{},comb:true,pol:true,bcc:true},L=window.LDc,CHN={email:"Email",wa:"WhatsApp",letter:"Letter"},Q=null;try{CB.comb=localStorage.getItem("ld_comb")!=="0"}catch(e){}CB.pol=CB.comb;
 function isP(n){return contact(n).ltype==="proposal"}
 function emOf(n){return mails(contact(n).email).filter(function(m){return EM.test(m)}).join(", ")}
 function waOf(n){return L.waNum(contact(n).wa)}
@@ -3037,12 +3047,12 @@ function groupSet(bs){var nm=[],st=new Set(),bk={};bs.forEach(function(b){b.cl.f
 function toolbar(bs,ll){
   var opt=function(l,cur,all){return'<option value="">'+all+" ("+l.length+")</option>"+l.map(function(x){return'<option value="'+esc(x.n)+'"'+(key(x.n)===key(cur)?" selected":"")+">"+esc(x.n)+" ("+x.c+")</option>"}).join("")},
     g=groupSet(bs),gc=function(ch){return g.nm.filter(function(n){return can1(ch,n)}).length},
-    gt={email:"One email to everyone in this group (recipients hidden in Bcc)",wa:"One WhatsApp message per client (WhatsApp cannot send one message to many)",letter:"One combined letter per bank & branch, ready to print or save as PDF"};
+    gt={email:"One email to everyone in this group (recipients hidden in Bcc)",wa:(CB.pol?"One WhatsApp message per bank & branch (pick the chat in WhatsApp)":"One WhatsApp message per client (WhatsApp cannot send one message to many)"),letter:"One combined letter per bank & branch, ready to print or save as PDF"};
   return'<div class="cbt"><div class="cbr1">'
    +'<label class="cbf">Search<input type="search" id="cbQ" placeholder="Search client, bank or branch" autocomplete="off" value="'+esc(CB.q)+'"></label>'
    +'<label class="cbf">Bank<select id="cbBk">'+opt(ll.b,CB.bank,"All banks")+'</select></label>'
    +'<label class="cbf">Branch<select id="cbBr">'+opt(ll.r,CB.br,CB.bank?"All branches of this bank":"All branches")+'</select></label>'
-   +'<label class="cbck" title="Make one email or letter for each bank and branch instead of one per client"><input type="checkbox" id="cbC"> One email / letter per bank &amp; branch</label></div>'
+   +'<label class="cbck" title="Policy: clients with the same bank and the same branch go together in one letter, email or WhatsApp message (clients shown in a table)"><input type="checkbox" id="cbC"> Policy: one letter / email / WhatsApp per bank &amp; branch</label></div>'
    +'<div class="cbr2"><div class="cbgs"><span class="cbgt">Group send \u2013 <b>'+esc(groupLabel())+'</b><span class="hint"> '+g.nm.length+" client"+(g.nm.length===1?"":"s")+"</span></span>"
    +["email","wa","letter"].map(function(ch){return'<button type="button" class="cbb pri" data-gs="'+ch+'" title="'+gt[ch]+'">Group '+CHN[ch].toLowerCase()+" ("+(ch==="letter"?g.nm.length:gc(ch))+")</button>"}).join("")+'</div>'
    +'<span class="cbsel"><span id="cbN" class="hint"></span><button class="cbb pri" data-b="email">Email</button><button class="cbb pri" data-b="wa">WhatsApp</button><button class="cbb pri" data-b="letter">Letter</button><button class="cbb" data-b="clr">Clear</button></span></div></div>'}
@@ -3102,20 +3112,21 @@ $("clist").onclick=function(ev){
   else if(d.o!==undefined){S.grp=d.o;showView("compose");renderAll();document.body.classList.add("reading")}
   else if(d.x!==undefined){var n=d.x;if(!confirm("Remove client "+n+" and all its entries?"))return;logIt("Client","Removed","Client and its entries",n);S.entries=S.entries.filter(function(e){return key(e.cn)!==key(n)});delete S.clients[key(n)];delete CB.sel[key(n)];if(S.grp===n)S.grp="";save();renderAll()}
 };
-function setComb(v){CB.comb=!!v;try{localStorage.setItem("ld_comb",v?"1":"0")}catch(e){}}
+function setComb(v){CB.comb=!!v;CB.pol=!!v;try{localStorage.setItem("ld_comb",v?"1":"0")}catch(e){}}
 /* ---- units: one per client, or one combined per bank & branch ---- */
 function emU(u){return u.names.map(emOf).reduce(function(a,b){return L.mergeM(a,b)},"")}
 function units(ch,list,comb){
   var out=[],m={};
   list.forEach(function(n){
-    var ok=can1(ch,n),one={label:n,names:[n],ok:ok,use:ok,done:0};
-    if(!comb||ch==="wa"||isP(n)||!ok){out.push(one);return}
+    var ok=comb?!isP(n):can1(ch,n),one={label:n,names:[n],ok:ok,use:ok,done:0};
+    if(!comb||isP(n)||!ok){out.push(one);return}
     groups().filter(function(g){return key(g.name)===key(n)})[0].items.forEach(function(e){
       if(Q.set&&!Q.set.has(e))return;
       var lab=(e.bn||"No bank")+" \u2013 "+(e.br||"No branch"),k=key(lab);
-      if(!m[k]){m[k]={label:lab,names:[],items:[],ok:true,use:true,done:0};out.push(m[k])}
+      if(!m[k]){m[k]={label:lab,bn:e.bn||"No bank",br:e.br||"No branch",names:[],items:[],ok:true,use:true,done:0};out.push(m[k])}
       if(m[k].names.indexOf(n)<0)m[k].names.push(n);m[k].items.push(e)})
   });
+  if(comb)out.sort(function(a,b){var ag=a.items?0:1,bg=b.items?0:1;if(ag!==bg)return ag-bg;return String(a.bn||"").localeCompare(String(b.bn||""))||String(a.br||"").localeCompare(String(b.br||""))});
   return out
 }
 function mk(u,ch){
@@ -3128,7 +3139,7 @@ function mk(u,ch){
       if(dr&&dr.html!==undefined){var t=document.createElement("div");t.innerHTML=dr.html;o.body=outlookBody(toText(t))}else o.body=r.body;
       o.dest=o.to;if(its&&Q.bcc&&u.names.length>1){o.bcc=L.mergeM(o.bcc,o.to);o.to=""}
       o.url=L.mailUrl(S.mailapp,o.to,o.cc,o.bcc,o.sub,o.body)}
-    else if(ch==="wa"){var w=waOf(u.names[0]);o.url=L.waUrl(w,r.body);o.dest="+"+w}
+    else if(ch==="wa"){if(its){o.url=L.waUrl("",r.body);o.dest="chat chosen in WhatsApp"}else{var w=waOf(u.names[0]);o.url=L.waUrl(w,r.body);o.dest="+"+w}}
     else{o.html=dr&&dr.lhtml!==undefined?dr.lhtml:(r.html||toHtml(r.body));o.prop=!its&&isP(u.names[0])}
     return o
   }finally{groups=og;S.grp=old}
@@ -3142,7 +3153,7 @@ function openOne(o,ch){
 function run(ch,list,label,force,set){
   if(deny("send"))return;list=names(list);
   if(!list.length){toast("Select at least one client");return}
-  Q={ch:ch,label:label,set:set||null,names:list,comb:CB.comb&&ch!=="wa",bcc:CB.bcc};Q.items=units(ch,list,Q.comb);
+  Q={ch:ch,label:label,set:set||null,names:list,comb:ch==="wa"?CB.pol:CB.comb,bcc:CB.bcc};Q.items=units(ch,list,Q.comb);
   if(!force&&list.length===1&&ch==="letter"){doLetters(false);return}
   if(!force&&list.length===1&&Q.items[0].ok){openItem(0,1);renderClients();return}
   dlg()
@@ -3157,14 +3168,15 @@ D.onclick=function(ev){var b=ev.target.closest("button");if(!b)return;
     if(ic==="letter"){var q0=Q;Q=Object.assign({},q0,{ch:"letter",items:[t0]});doLetters(false);Q=q0;setTimeout(dlg,600);return}
     var m0=mk(t0,ic);if(m0){openOne(m0,ic);toast(CHN[ic]+" opened for "+t0.names[0])}dlg();return}
   var i=b.dataset.i;if(i!==undefined){openItem(+i);return}
-  if(b.id==="bkCt"){setComb(!CB.comb);Q.comb=CB.comb&&Q.ch!=="wa";Q.items=units(Q.ch,Q.names,Q.comb);dlg();return}
+  if(b.id==="bkCt"){var nv=!Q.comb;setComb(nv);Q.comb=nv;Q.items=units(Q.ch,Q.names,Q.comb);dlg();return}
   if(b.id==="bkBt"){CB.bcc=Q.bcc=!Q.bcc;dlg();return}
   if(b.id==="bkNext"||b.id==="bkNextH"){var k=Q.items.filter(function(x){return x.use&&x.ok&&!x.done})[0];if(k)openItem(Q.items.indexOf(k));return}
   if(b.id==="bkAll"||b.id==="bkAllH"){Q.items.forEach(function(x,i){if(x.use&&x.ok&&!x.done)openItem(i,1)});dlg();return}
   if(b.id==="bkPrn")doLetters(false);if(b.id==="bkDoc")doLetters(true)};
 D.onchange=function(ev){var t=ev.target;
+  if(t.dataset.bk!==undefined){Q.items.forEach(function(y){if(y.items&&y.bn===t.dataset.bk&&y.ok)y.use=t.checked});dlg();return}
   if(t.id==="bkSel"){Q.items.forEach(function(x){if(x.ok)x.use=t.checked});dlg();return}
-  if(t.id==="bkC"){setComb(t.checked);Q.comb=CB.comb;Q.items=units(Q.ch,Q.names,Q.comb);dlg();return}
+  if(t.id==="bkC"){setComb(t.checked);Q.comb=Q.ch==="wa"?CB.pol:CB.comb;Q.items=units(Q.ch,Q.names,Q.comb);dlg();return}
   if(t.id==="bkB"){CB.bcc=Q.bcc=t.checked;return}
   if(t.dataset.u!==undefined){Q.items[+t.dataset.u].use=t.checked;dlg()}};
 function openItem(i,quiet){var x=Q.items[i],m=mk(x,Q.ch);if(!m)return;openOne(m,Q.ch);x.done=1;if(!quiet&&D.open)dlg()}
@@ -3172,11 +3184,23 @@ function dlg(){
   var ch=Q.ch,pl=ch==="letter",go=Q.items.filter(function(x){return x.use&&x.ok}).length,left=Q.items.filter(function(x){return x.use&&x.ok&&!x.done}).length;
   var h='<div class="dh"><h2>'+CHN[ch]+(pl?"s":"")+' \u2013 '+esc(Q.label)+'</h2><button class="ib" id="bkX" aria-label="Close">'+icn("x")+'</button></div>';
   ICN.bkm='<rect x="4" y="4" width="16" height="6" rx="1"/><rect x="4" y="14" width="16" height="6" rx="1"/>';ICN.bkb='<path d="M3 3l18 18M10.6 6.2A9.5 9.5 0 0 1 12 6c5 0 8.5 4 9.5 6a14 14 0 0 1-2.6 3.4M6.5 7.6C4.4 9 3 11 2.5 12c1 2 4.5 6 9.5 6 1.3 0 2.5-.3 3.6-.8"/>';ICN.bka='<path d="M4 6l7 6-7 6M12 6l7 6-7 6"/>';
+  h+='<label class="gsw"><input type="checkbox" id="bkC"'+(Q.comb?" checked":"")+'> <b>Group by bank &rsaquo; branch &rsaquo; client</b> <span class="hint">Same bank and branch together in one '+(pl?"letter":ch==="wa"?"WhatsApp message":"email")+', clients listed in a table</span></label>';
   h+='<p class="hint">'+(pl?"All ticked letters are put together, one per page, so you can print or save them as one PDF.":"Each message opens in "+(ch==="wa"?"WhatsApp":(L.PN[S.mailapp]||"your mail app"))+" ready to send. Use Open next to work through the list, or Open all (allow pop-ups if your browser blocks it).")+'</p>';
   var okN=Q.items.filter(function(x){return x.ok}).length,onN=Q.items.filter(function(x){return x.ok&&x.use}).length;
-  h+='<div class="wrap"><table class="bkt"><colgroup><col style="width:44px"><col><col style="width:'+(ch==="letter"?"20":"27")+'%"><col style="width:15%"><col style="width:'+(pl?"150":"210")+'px"></colgroup><thead><tr><th><input type="checkbox" id="bkSel" title="Select all / none" aria-label="Select all / none"'+(okN&&onN===okN?" checked":"")+(okN?"":" disabled")+'></th><th>'+(Q.comb&&ch!=="wa"?"Bank &amp; branch":"Client")+(ch!=="wa"?'<button type="button" class="ib sm hb" id="bkCt" aria-pressed="'+(Q.comb?"true":"false")+'" title="One '+(pl?"letter":"email")+' for each bank &amp; branch" aria-label="One for each bank and branch">'+icn("bkm")+'</button>':"")+'</th><th>'+(ch==="email"?"To":ch==="wa"?"Number":"Type")+(ch==="email"&&Q.comb?'<button type="button" class="ib sm hb" id="bkBt" aria-pressed="'+(Q.bcc?"true":"false")+'" title="Hide recipients (Bcc)" aria-label="Hide recipients (Bcc)">'+icn("bkb")+'</button>':"")+'</th><th>Status</th><th class="hr">'+(pl?"":'<button type="button" class="ib sm hb" id="bkNextH" title="Open next ('+left+' left)" aria-label="Open next"'+(left?"":" disabled")+'>'+icn("play")+'</button><button type="button" class="ib sm hb" id="bkAllH" title="Open all" aria-label="Open all"'+(left?"":" disabled")+'>'+icn("bka")+'</button>')+'</th></tr></thead><tbody>';
+  h+='<div class="wrap"><table class="bkt"><colgroup><col style="width:44px"><col><col style="width:'+(ch==="letter"?"20":"27")+'%"><col style="width:15%"><col style="width:'+(pl?"150":"210")+'px"></colgroup><thead><tr><th><input type="checkbox" id="bkSel" title="Select all / none" aria-label="Select all / none"'+(okN&&onN===okN?" checked":"")+(okN?"":" disabled")+'></th><th>'+(Q.comb?"Bank &rsaquo; branch &rsaquo; client":"Client")+'<button type="button" class="ib sm hb" id="bkCt" aria-pressed="'+(Q.comb?"true":"false")+'" title="Policy: one '+(pl?"letter":ch==="wa"?"WhatsApp message":"email")+' for each bank &amp; branch" aria-label="One for each bank and branch">'+icn("bkm")+'</button></th><th>'+(ch==="email"?"To":ch==="wa"?(Q.comb?"Send to":"Number"):"Type")+(ch==="email"&&Q.comb?'<button type="button" class="ib sm hb" id="bkBt" aria-pressed="'+(Q.bcc?"true":"false")+'" title="Hide recipients (Bcc)" aria-label="Hide recipients (Bcc)">'+icn("bkb")+'</button>':"")+'</th><th>Status</th><th class="hr">'+(pl?"":'<button type="button" class="ib sm hb" id="bkNextH" title="Open next ('+left+' left)" aria-label="Open next"'+(left?"":" disabled")+'>'+icn("play")+'</button><button type="button" class="ib sm hb" id="bkAllH" title="Open all" aria-label="Open all"'+(left?"":" disabled")+'>'+icn("bka")+'</button>')+'</th></tr></thead><tbody>';
+  var lastB=null;
   Q.items.forEach(function(x,i){var c=x.items,n=x.names[0];
-    h+='<tr><td><input type="checkbox" data-u="'+i+'"'+(x.use&&x.ok?" checked":"")+(x.ok?"":" disabled")+'></td><td>'+(c?esc(x.label)+' <span class="hint">'+x.names.length+' client'+(x.names.length>1?"s":"")+': '+esc(x.names.join(", "))+'</span>':avatar(n)+esc(n))+'</td><td>'+esc(ch==="email"?emU(x):ch==="wa"?(waOf(n)?"+"+waOf(n):""):c?"Combined letter":isP(n)?"Proposal letter":"Renewal letter")+'</td><td class="st '+(x.done?"ok":x.ok?"":"no")+'">'+(x.done?"\u2713 Done":x.ok?"Pending":"Skipped \u2013 "+why(ch,n))+'</td><td class="hr"><span class="cbr">'+(!pl&&x.ok?'<button class="cbb on" data-i="'+i+'">Open</button>':"")+(c?"":["email","wa","letter"].filter(function(k){return k!==ch}).map(function(k){return'<button class="cbb'+(can1(k,n)?"":" need")+'" data-ich="'+k+'" data-i="'+i+'" title="Send '+esc(n)+' by '+CHN[k]+' instead">'+CHN[k]+"</button>"}).join(""))+'</span></td></tr>'});
+    if(Q.comb){var bk=c?x.bn:"";
+      if(bk!==lastB){lastB=bk;
+        if(c){var bu=Q.items.filter(function(y){return y.items&&y.bn===bk}),seen={},nc=0;bu.forEach(function(y){y.names.forEach(function(z){if(!seen[z]){seen[z]=1;nc++}})});
+          h+='<tr class="bkb"><td><input type="checkbox" data-bk="'+esc(bk)+'" aria-label="Select bank '+esc(bk)+'"'+(bu.every(function(y){return!y.ok||y.use})?" checked":"")+'></td><td colspan="4">'+esc(bk)+' <span class="hint">'+bu.length+' branch'+(bu.length>1?"es":"")+' \u00b7 '+nc+' client'+(nc>1?"s":"")+'</span></td></tr>'}
+        else h+='<tr class="bkb"><td></td><td colspan="4">Individual <span class="hint">not grouped</span></td></tr>'}}
+    if(Q.comb&&c){
+      h+='<tr class="bkr"><td><input type="checkbox" data-u="'+i+'"'+(x.use&&x.ok?" checked":"")+(x.ok?"":" disabled")+'></td><td><span class="brn">'+esc(x.br)+'</span> <span class="hint">'+x.names.length+' client'+(x.names.length>1?"s":"")+'</span></td><td>'+esc(ch==="email"?(emU(x)||"No client email \u2013 add recipient"):ch==="wa"?"Pick the chat in WhatsApp":"Combined letter")+'</td><td class="st '+(x.done?"ok":x.ok?"":"no")+'">'+(x.done?"\u2713 Done":x.ok?"Pending":"Skipped")+'</td><td class="hr"><span class="cbr">'+(!pl&&x.ok?'<button class="cbb on" data-i="'+i+'">Open</button>':"")+'</span></td></tr>';
+      x.names.forEach(function(nm,j){var its=x.items.filter(function(e){return key(e.cn)===key(nm)});
+        h+='<tr class="bkc'+(j===x.names.length-1?" end":"")+'"><td></td><td colspan="4">'+avatar(nm)+esc(nm)+' <span class="hint">'+esc(its.map(function(e){return[e.rt,shortDate(e.vt)].filter(Boolean).join(" \u00b7 ")}).join("; "))+'</span>'+(ch==="email"&&!emOf(nm)?' <span class="hint nm">no email</span>':"")+'</td></tr>'});
+      return}
+        h+='<tr><td><input type="checkbox" data-u="'+i+'"'+(x.use&&x.ok?" checked":"")+(x.ok?"":" disabled")+'></td><td>'+(c?esc(x.label)+' <span class="hint">'+x.names.length+' client'+(x.names.length>1?"s":"")+': '+esc(x.names.join(", "))+'</span>':avatar(n)+esc(n))+'</td><td>'+esc(ch==="email"?emU(x):ch==="wa"?(c?"Pick the chat in WhatsApp":waOf(n)?"+"+waOf(n):""):c?"Combined letter":isP(n)?"Proposal letter":"Renewal letter")+'</td><td class="st '+(x.done?"ok":x.ok?"":"no")+'">'+(x.done?"\u2713 Done":x.ok?"Pending":"Skipped \u2013 "+why(ch,n))+'</td><td class="hr"><span class="cbr">'+(!pl&&x.ok?'<button class="cbb on" data-i="'+i+'">Open</button>':"")+(c?"":["email","wa","letter"].filter(function(k){return k!==ch}).map(function(k){return'<button class="cbb'+(can1(k,n)?"":" need")+'" data-ich="'+k+'" data-i="'+i+'" title="Send '+esc(n)+' by '+CHN[k]+' instead">'+CHN[k]+"</button>"}).join(""))+'</span></td></tr>'});
   h+='</tbody></table></div><div class="bar" style="margin-top:10px">';
   h+=pl?'<button class="pri" id="bkPrn"'+(go?"":" disabled")+'>Print / Save PDF ('+go+')</button><button id="bkDoc"'+(go?"":" disabled")+'>Download Word</button>':'<button class="pri" id="bkNext"'+(left?"":" disabled")+'>Open next ('+left+' left)</button><button id="bkAll"'+(left?"":" disabled")+'>Open all</button>';
   D.innerHTML=h+'<button id="bkX2">Close</button></div>';
@@ -3203,7 +3227,7 @@ function doLetters(word){
   Q.items.forEach(function(x){if(x.use&&x.ok)x.done=1});
   if(word&&D.open)dlg()
 }
-window.LDrun=run;window.LDcb={get:function(){return CB.comb},set:setComb};
+window.LDrun=run;window.LDcb={get:function(){return CB.pol},set:setComb};
 try{renderClients()}catch(e){}
 })();
 </script>
