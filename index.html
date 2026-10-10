@@ -3447,5 +3447,44 @@ try{renderUsers()}catch(e){}
 @media(max-width:900px){#clist .cbt .cbr1{grid-template-columns:repeat(2,minmax(0,1fr))}#clist .cbt .cbr1>.cbf:first-child{grid-column:1 / -1}}
 @media(max-width:520px){#clist .cbt .cbr1{grid-template-columns:minmax(0,1fr)}}
 </style>
+<style id="topInk">
+/* Header + status bar text follows the bar colour (data-topl is set by script from the real background) */
+html[data-topl="light"] .top,html[data-topl="light"] .top .brand,html[data-topl="light"] .top .clk,html[data-topl="light"] .top .vt,
+html[data-topl="light"] .top .acb,html[data-topl="light"] .top .acn,html[data-topl="light"] .top .acn b,html[data-topl="light"] .top .acn small,html[data-topl="light"] .top .acv{color:#1f1f1f}
+html[data-topl="light"] .top .tb{background:rgba(0,0,0,.07);color:#1f1f1f}
+html[data-topl="light"] .top .tb:hover,html[data-topl="light"] .top .acb:hover{background:rgba(0,0,0,.1)}
+html[data-topl="light"] .top input{background:rgba(0,0,0,.06);color:#1f1f1f}
+html[data-topl="light"] .top input::placeholder{color:#5f6368}
+html[data-topl="light"] .top .av2,html[data-topl="light"] .top .logo{background-color:var(--brand);color:var(--brand-ink,#fff)}
+html[data-topl="light"] .statusbar,html[data-topl="light"] .mh{color:#1f1f1f}
+html[data-topl="dark"] .top,html[data-topl="dark"] .top .brand,html[data-topl="dark"] .top .clk,html[data-topl="dark"] .top .vt,
+html[data-topl="dark"] .top .acb,html[data-topl="dark"] .top .acn,html[data-topl="dark"] .top .acn b,html[data-topl="dark"] .top .acn small,html[data-topl="dark"] .top .acv{color:#fff}
+html[data-topl="dark"] .top .acb:hover{background:rgba(255,255,255,.18)}
+html[data-topl="dark"] .statusbar,html[data-topl="dark"] .mh{color:#fff}
+.top .acb,.top .acn,.top .acv{transition:color .15s}
+</style>
+<script>
+(function(){
+var r=document.documentElement,raf=0;
+function rgb(c){var m=(c||"").match(/[\d.]+/g);return m&&m.length>=3?m.slice(0,3).map(Number):null}
+function lin(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)}
+function lum(c){return .2126*lin(c[0])+.7152*lin(c[1])+.0722*lin(c[2])}
+function barColor(){
+ var t=document.querySelector(".top");if(!t)return null;
+ var cs=getComputedStyle(t),m=(cs.backgroundColor||"").match(/[\d.]+/g);
+ if(m&&m.length>=3&&(m.length<4||+m[3]>.5))return rgb(cs.backgroundColor);
+ var p=document.createElement("i");p.style.cssText="position:absolute;width:0;height:0;visibility:hidden;background-color:var(--top)";document.body.appendChild(p);
+ var a=rgb(getComputedStyle(p).backgroundColor);p.remove();
+ if(a&&/gradient/.test(cs.backgroundImage||"")){var pu=[124,58,237];a=a.map(function(v,i){return v*.775+pu[i]*.225})}
+ return a}
+function sync(){raf=0;var c=barColor();if(!c)return;var v=lum(c)>.28?"light":"dark";if(r.getAttribute("data-topl")!==v)r.setAttribute("data-topl",v)}
+function q(){if(!raf)raf=requestAnimationFrame(sync);setTimeout(sync,400)}
+new MutationObserver(q).observe(r,{attributes:true,attributeFilter:["style","data-theme","data-design","data-nav","data-sbs"]});
+if(window.matchMedia){var mq=matchMedia("(prefers-color-scheme: dark)");if(mq.addEventListener)mq.addEventListener("change",q)}
+window.addEventListener("resize",q);window.addEventListener("load",q);
+if(typeof applyUI==="function"){var _a=applyUI;applyUI=function(){var x=_a.apply(this,arguments);q();return x}}
+q();
+})();
+</script>
 </body>
 </html>
