@@ -4,6 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="cloud-config.js"></script>
+<script>
+/* Auto-join: a device link (#join=...) connects this browser to the team workspace before the app starts. */
+(function(){
+var LS=window.localStorage;
+function b64u(t){return btoa(unescape(encodeURIComponent(t))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+function unb64u(c){c=c.replace(/-/g,"+").replace(/_/g,"/");while(c.length%4)c+="=";return decodeURIComponent(escape(atob(c)))}
+window.LD_JOIN={
+ encode:function(cfg,key){return b64u(JSON.stringify({v:1,c:cfg,k:key||""}))},
+ apply:function(txt){try{
+  var m=String(txt||"").match(/join=([A-Za-z0-9_\-]+)/),code=m?m[1]:String(txt||"").trim();
+  if(!code)return false;
+  var j=JSON.parse(unb64u(code));
+  if(!j||!j.c||typeof j.c!=="object"||!j.c.provider)return false;
+  LS.ld_cfg=JSON.stringify(j.c);LS.ld_pv=j.c.provider;
+  if(j.k)LS.ld_key=j.k;
+  ["ld_rev","ld_rt"].forEach(function(k){LS.removeItem(k)});
+  return true}catch(e){return false}}
+};
+try{if(/[#&]join=/.test(location.hash||"")){LD_JOIN.apply(location.hash);history.replaceState(null,"",location.pathname+location.search)}}catch(e){}
+})();
+</script>
 <title>Letter Desk</title>
 <style>
 :root{--bg:#f5f5f5;--card:#fff;--ink:#242424;--mute:#616161;--line:#e1dfdd;--brand:#0f6cbd;--brand-ink:#fff;--sel:#ebf3fc;--rail:#f0f0f0;--warn:#b10e1c;--amber:#9d5d00;--green:#107c10;--paper:#fff;
@@ -1596,8 +1617,8 @@ function sess(){try{return sessionStorage.getItem("ldsess")||""}catch(e){return"
 var tries=0,lockUntil=0;
 function cloudCfgOn(){try{var d=window.LD_CLOUD||{},s=JSON.parse(localStorage.ld_cfg||"{}"),p="provider" in s?s.provider:(d.provider||"");if(!p)return false;var a=Object.assign({},d[p]||{}),b=s[p]||{};for(var k in b)if(b[k])a[k]=b[k];return!!(a.project||a.clientId)}catch(e){return false}}
 window.CS=window.CS||(cloudCfgOn()?"wait":"off");
-var LGN={off:"Users and passwords are saved in THIS browser only. To use them on another device, sign in as admin and use Settings > Data > Export backup, then Import on the other device. For automatic sync, connect cloud storage in Settings > Cloud & data.",wait:"Connecting to cloud storage to load your team's users\u2026",
- key:"The workspace password was not accepted. Reload the page and enter the password you were given by your admin.",nokey:"No workspace password was entered, so your team's users could not be loaded. Reload the page and enter it.",auth:"Cloud sign-in is needed. Click the cloud badge at the bottom left and sign in, then this screen continues.",net:"Cannot reach cloud storage, so users added on other devices are not loaded. Check your internet connection and reload the page."};
+var LGN={off:"Users and passwords are saved in THIS browser only. To use them on another device, ask your admin for a device link (Settings > Cloud storage > Open on another device).",wait:"Connecting to cloud storage to load your team's users\u2026",
+ key:"The workspace password was not accepted. Enter the correct one below.",nokey:"This device is not connected to your team yet. Enter the workspace password from your admin below, or open the device link your admin sent you.",auth:"Cloud sign-in is needed. Click the cloud badge at the bottom left and sign in, then this screen continues.",net:"Cannot reach cloud storage, so users added on other devices are not loaded. Check your internet connection and reload the page."};
 function lgGate(){var cs=window.CS||"off",w=cs==="wait",t=cs==="off"||w?LGN[cs]:cs==="fail"?(LGN[window.CSM]||LGN.net):"",n=$("lgNote");if(!n)return;n.textContent=t;n.style.display=t?"":"none";n.style.color=cs==="fail"?"var(--warn)":"";$("lgGo").disabled=w;["lgE","lgP","lgP2"].forEach(function(i){$(i).disabled=w})}
 function lgShow(){ensureUsers();var cs0=window.CS||"off",setup=cs0!=="wait"&&cs0!=="fail"&&!S.users.some(function(u){return u.ph}),a=S.users.filter(function(u){return u.on&&u.role==="admin"})[0]||S.users[0];
  document.body.classList.add("locked");$("lg").hidden=false;$("lgP2w").hidden=!setup;$("lgEw").hidden=setup;$("lgP").value=$("lgP2").value="";$("lgShow").checked=false;$("lgP").type=$("lgP2").type="password";$("lgMsg").textContent="";
@@ -1798,7 +1819,7 @@ function arm(){clearInterval(pt);var v=CLOUD.poll===""||CLOUD.poll==null?30:+CLO
 document.addEventListener("visibilitychange",function(){if(!document.hidden)auto()});
 var rb=document.getElementById("cl_r");if(rb)rb.onclick=function(){ui.click()};
 var tb=document.getElementById("cl_t");if(tb)tb.onclick=function(){st("Testing...");(Pv.auth?Pv.auth(true):Promise.resolve()).then(function(){return Pv.read()}).then(function(){st("Connection OK")}).catch(function(e){st(e==="auth"?"Sign-in failed":"Test failed: "+((e&&e.message)||e))})};
-pass=LS.ld_key||CLOUD.key||prompt("Cloud workspace password (use the SAME password on every device; if this is the first device, choose one now):")||"";
+pass=LS.ld_key||CLOUD.key||"";
 if(pass){LS.ld_key=pass;pull();arm();setTimeout(function(){if(window.CS==="wait")cs("fail","net")},15000)}else{cs("fail","nokey");st("Cloud off")}
 })();
 </script>
@@ -2953,6 +2974,18 @@ badge();
 #clist .cbs{color:var(--green);font-size:11px;margin-left:6px}
 #d_bulk .cbr{display:flex;gap:4px;flex-wrap:wrap}#d_bulk .cbb.need{border-style:dashed;color:var(--mute)}
 #d_bulk .st{font-size:12px}#d_bulk .st.ok{color:var(--green)}#d_bulk .st.no{color:var(--mute)}
+#d_bulk table.bkt{table-layout:fixed;width:100%;min-width:640px}
+#d_bulk .bkt th,#d_bulk .bkt td{vertical-align:middle;padding:8px}
+#d_bulk .bkt th{white-space:nowrap}
+#d_bulk .bkt th:first-child,#d_bulk .bkt td:first-child{text-align:center;padding-left:4px;padding-right:4px}
+#d_bulk .bkt td{overflow-wrap:anywhere}
+#d_bulk .bkt th.hr,#d_bulk .bkt td.hr{text-align:right}
+#d_bulk .bkt .cbr{justify-content:flex-end}
+#d_bulk .bkt input[type=checkbox]{width:16px;height:16px;margin:0;cursor:pointer}
+#d_bulk .hb{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin-left:4px;width:28px;height:28px;padding:0}
+#d_bulk .hb svg{width:16px;height:16px}
+#d_bulk .hb[aria-pressed=true]{background:var(--sel);color:var(--brand);border-color:var(--brand)}
+#d_bulk .hb[disabled]{opacity:.4;cursor:default}
 #bulkPrint{display:none}
 body.bulkprint>*:not(#bulkPrint){display:none!important}
 body.bulkprint #bulkPrint{display:block;background:#fff;color:#000}
@@ -3124,10 +3157,13 @@ D.onclick=function(ev){var b=ev.target.closest("button");if(!b)return;
     if(ic==="letter"){var q0=Q;Q=Object.assign({},q0,{ch:"letter",items:[t0]});doLetters(false);Q=q0;setTimeout(dlg,600);return}
     var m0=mk(t0,ic);if(m0){openOne(m0,ic);toast(CHN[ic]+" opened for "+t0.names[0])}dlg();return}
   var i=b.dataset.i;if(i!==undefined){openItem(+i);return}
-  if(b.id==="bkNext"){var k=Q.items.filter(function(x){return x.use&&x.ok&&!x.done})[0];if(k)openItem(Q.items.indexOf(k));return}
-  if(b.id==="bkAll"){Q.items.forEach(function(x,i){if(x.use&&x.ok&&!x.done)openItem(i,1)});dlg();return}
+  if(b.id==="bkCt"){setComb(!CB.comb);Q.comb=CB.comb&&Q.ch!=="wa";Q.items=units(Q.ch,Q.names,Q.comb);dlg();return}
+  if(b.id==="bkBt"){CB.bcc=Q.bcc=!Q.bcc;dlg();return}
+  if(b.id==="bkNext"||b.id==="bkNextH"){var k=Q.items.filter(function(x){return x.use&&x.ok&&!x.done})[0];if(k)openItem(Q.items.indexOf(k));return}
+  if(b.id==="bkAll"||b.id==="bkAllH"){Q.items.forEach(function(x,i){if(x.use&&x.ok&&!x.done)openItem(i,1)});dlg();return}
   if(b.id==="bkPrn")doLetters(false);if(b.id==="bkDoc")doLetters(true)};
 D.onchange=function(ev){var t=ev.target;
+  if(t.id==="bkSel"){Q.items.forEach(function(x){if(x.ok)x.use=t.checked});dlg();return}
   if(t.id==="bkC"){setComb(t.checked);Q.comb=CB.comb;Q.items=units(Q.ch,Q.names,Q.comb);dlg();return}
   if(t.id==="bkB"){CB.bcc=Q.bcc=t.checked;return}
   if(t.dataset.u!==undefined){Q.items[+t.dataset.u].use=t.checked;dlg()}};
@@ -3135,14 +3171,16 @@ function openItem(i,quiet){var x=Q.items[i],m=mk(x,Q.ch);if(!m)return;openOne(m,
 function dlg(){
   var ch=Q.ch,pl=ch==="letter",go=Q.items.filter(function(x){return x.use&&x.ok}).length,left=Q.items.filter(function(x){return x.use&&x.ok&&!x.done}).length;
   var h='<div class="dh"><h2>'+CHN[ch]+(pl?"s":"")+' \u2013 '+esc(Q.label)+'</h2><button class="ib" id="bkX" aria-label="Close">'+icn("x")+'</button></div>';
-  if(ch!=="wa")h+='<div style="display:flex;gap:16px;flex-wrap:wrap;margin:4px 0 8px"><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bkC"'+(Q.comb?" checked":"")+'> One '+(pl?"letter":"email")+' for each bank &amp; branch</label>'+(ch==="email"&&Q.comb?'<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bkB"'+(Q.bcc?" checked":"")+'> Hide recipients (Bcc)</label>':"")+'</div>';
+  ICN.bkm='<rect x="4" y="4" width="16" height="6" rx="1"/><rect x="4" y="14" width="16" height="6" rx="1"/>';ICN.bkb='<path d="M3 3l18 18M10.6 6.2A9.5 9.5 0 0 1 12 6c5 0 8.5 4 9.5 6a14 14 0 0 1-2.6 3.4M6.5 7.6C4.4 9 3 11 2.5 12c1 2 4.5 6 9.5 6 1.3 0 2.5-.3 3.6-.8"/>';ICN.bka='<path d="M4 6l7 6-7 6M12 6l7 6-7 6"/>';
   h+='<p class="hint">'+(pl?"All ticked letters are put together, one per page, so you can print or save them as one PDF.":"Each message opens in "+(ch==="wa"?"WhatsApp":(L.PN[S.mailapp]||"your mail app"))+" ready to send. Use Open next to work through the list, or Open all (allow pop-ups if your browser blocks it).")+'</p>';
-  h+='<div class="wrap"><table><thead><tr><th></th><th>'+(Q.comb&&ch!=="wa"?"Bank &amp; branch":"Client")+'</th><th>'+(ch==="email"?"To":ch==="wa"?"Number":"Type")+'</th><th>Status</th><th></th></tr></thead><tbody>';
+  var okN=Q.items.filter(function(x){return x.ok}).length,onN=Q.items.filter(function(x){return x.ok&&x.use}).length;
+  h+='<div class="wrap"><table class="bkt"><colgroup><col style="width:44px"><col><col style="width:'+(ch==="letter"?"20":"27")+'%"><col style="width:15%"><col style="width:'+(pl?"150":"210")+'px"></colgroup><thead><tr><th><input type="checkbox" id="bkSel" title="Select all / none" aria-label="Select all / none"'+(okN&&onN===okN?" checked":"")+(okN?"":" disabled")+'></th><th>'+(Q.comb&&ch!=="wa"?"Bank &amp; branch":"Client")+(ch!=="wa"?'<button type="button" class="ib sm hb" id="bkCt" aria-pressed="'+(Q.comb?"true":"false")+'" title="One '+(pl?"letter":"email")+' for each bank &amp; branch" aria-label="One for each bank and branch">'+icn("bkm")+'</button>':"")+'</th><th>'+(ch==="email"?"To":ch==="wa"?"Number":"Type")+(ch==="email"&&Q.comb?'<button type="button" class="ib sm hb" id="bkBt" aria-pressed="'+(Q.bcc?"true":"false")+'" title="Hide recipients (Bcc)" aria-label="Hide recipients (Bcc)">'+icn("bkb")+'</button>':"")+'</th><th>Status</th><th class="hr">'+(pl?"":'<button type="button" class="ib sm hb" id="bkNextH" title="Open next ('+left+' left)" aria-label="Open next"'+(left?"":" disabled")+'>'+icn("play")+'</button><button type="button" class="ib sm hb" id="bkAllH" title="Open all" aria-label="Open all"'+(left?"":" disabled")+'>'+icn("bka")+'</button>')+'</th></tr></thead><tbody>';
   Q.items.forEach(function(x,i){var c=x.items,n=x.names[0];
-    h+='<tr><td><input type="checkbox" data-u="'+i+'"'+(x.use&&x.ok?" checked":"")+(x.ok?"":" disabled")+'></td><td>'+(c?esc(x.label)+' <span class="hint">'+x.names.length+' client'+(x.names.length>1?"s":"")+': '+esc(x.names.join(", "))+'</span>':avatar(n)+esc(n))+'</td><td>'+esc(ch==="email"?emU(x):ch==="wa"?(waOf(n)?"+"+waOf(n):""):c?"Combined letter":isP(n)?"Proposal letter":"Renewal letter")+'</td><td class="st '+(x.done?"ok":x.ok?"":"no")+'">'+(x.done?"\u2713 Done":x.ok?"Pending":"Skipped \u2013 "+why(ch,n))+'</td><td><span class="cbr">'+(!pl&&x.ok?'<button class="cbb on" data-i="'+i+'">Open</button>':"")+(c?"":["email","wa","letter"].filter(function(k){return k!==ch}).map(function(k){return'<button class="cbb'+(can1(k,n)?"":" need")+'" data-ich="'+k+'" data-i="'+i+'" title="Send '+esc(n)+' by '+CHN[k]+' instead">'+CHN[k]+"</button>"}).join(""))+'</span></td></tr>'});
+    h+='<tr><td><input type="checkbox" data-u="'+i+'"'+(x.use&&x.ok?" checked":"")+(x.ok?"":" disabled")+'></td><td>'+(c?esc(x.label)+' <span class="hint">'+x.names.length+' client'+(x.names.length>1?"s":"")+': '+esc(x.names.join(", "))+'</span>':avatar(n)+esc(n))+'</td><td>'+esc(ch==="email"?emU(x):ch==="wa"?(waOf(n)?"+"+waOf(n):""):c?"Combined letter":isP(n)?"Proposal letter":"Renewal letter")+'</td><td class="st '+(x.done?"ok":x.ok?"":"no")+'">'+(x.done?"\u2713 Done":x.ok?"Pending":"Skipped \u2013 "+why(ch,n))+'</td><td class="hr"><span class="cbr">'+(!pl&&x.ok?'<button class="cbb on" data-i="'+i+'">Open</button>':"")+(c?"":["email","wa","letter"].filter(function(k){return k!==ch}).map(function(k){return'<button class="cbb'+(can1(k,n)?"":" need")+'" data-ich="'+k+'" data-i="'+i+'" title="Send '+esc(n)+' by '+CHN[k]+' instead">'+CHN[k]+"</button>"}).join(""))+'</span></td></tr>'});
   h+='</tbody></table></div><div class="bar" style="margin-top:10px">';
   h+=pl?'<button class="pri" id="bkPrn"'+(go?"":" disabled")+'>Print / Save PDF ('+go+')</button><button id="bkDoc"'+(go?"":" disabled")+'>Download Word</button>':'<button class="pri" id="bkNext"'+(left?"":" disabled")+'>Open next ('+left+' left)</button><button id="bkAll"'+(left?"":" disabled")+'>Open all</button>';
   D.innerHTML=h+'<button id="bkX2">Close</button></div>';
+  var sa=D.querySelector("#bkSel");if(sa)sa.indeterminate=!!(onN&&onN<okN);
   if(!D.open)D.showModal()
 }
 function doLetters(word){
@@ -3484,6 +3522,60 @@ if(window.matchMedia){var mq=matchMedia("(prefers-color-scheme: dark)");if(mq.ad
 window.addEventListener("resize",q);window.addEventListener("load",q);
 if(typeof applyUI==="function"){var _a=applyUI;applyUI=function(){var x=_a.apply(this,arguments);q();return x}}
 q();
+})();
+</script>
+<script>
+(function(){
+var LS=localStorage,web=/^https?:$/.test(location.protocol);
+function el(i){return document.getElementById(i)}
+/* sign-in screen: inline workspace password + "connect this device" */
+var n=el("lgNote");
+if(n)n.insertAdjacentHTML("afterend",
+ '<div id="lgKeyBox" hidden style="margin:0 0 10px"><label>Workspace password<input id="lgWk" type="password" autocomplete="off"></label><button type="button" class="pri" id="lgWkGo" style="width:100%">Connect</button></div>'
++'<div id="lgJoinBox" hidden style="margin:0 0 10px"><button type="button" id="lgJoinT" class="lnk" style="background:none;border:0;padding:0;color:var(--brand);cursor:pointer;font:inherit;text-decoration:underline">Connect this device to your team\'s workspace</button><div id="lgJoinIn" hidden style="margin-top:8px"><label>Device link or code<input id="lgJl" type="text" autocomplete="off" placeholder="Paste the link your admin sent"></label><button type="button" class="pri" id="lgJoinGo" style="width:100%">Connect</button></div></div>');
+function boxes(){
+ var cs=window.CS||"off",csm=window.CSM||"";
+ var k=el("lgKeyBox"),j=el("lgJoinBox");
+ if(k)k.hidden=!(cs==="fail"&&(csm==="key"||csm==="nokey"));
+ if(j)j.hidden=!(cs==="off"&&web)}
+if(typeof lgGate==="function"){var _g=lgGate;lgGate=function(){var r=_g.apply(this,arguments);boxes();return r}}
+if(typeof lgShow==="function"){var _s=lgShow;lgShow=function(){var r=_s.apply(this,arguments);boxes();return r}}
+function keyGo(){var v=(el("lgWk").value||"").trim();if(!v)return;LS.ld_key=v;LS.removeItem("ld_rev");location.reload()}
+if(el("lgWkGo")){el("lgWkGo").onclick=keyGo;el("lgWk").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();keyGo()}}}
+if(el("lgJoinT"))el("lgJoinT").onclick=function(){el("lgJoinIn").hidden=!el("lgJoinIn").hidden;if(!el("lgJoinIn").hidden)el("lgJl").focus()};
+function joinGo(){if(LD_JOIN.apply(el("lgJl").value))location.reload();else el("lgMsg").textContent="That link or code is not valid"}
+if(el("lgJoinGo")){el("lgJoinGo").onclick=joinGo;el("lgJl").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();joinGo()}}}
+boxes();
+
+/* admin: Settings > Cloud storage > Open on another device */
+var row=el("cl_m")&&el("cl_m").parentElement;if(!row)return;
+row.insertAdjacentHTML("afterend",
+ '<div id="cl_join" style="margin-top:12px;border-top:1px solid var(--line);padding-top:10px"><b>Open on another device</b>'
++'<p class="hint" style="margin:4px 0 8px">Make a device link or a setup file. A new device then connects to this workspace by itself and loads your team\'s users, so nobody needs the admin password. People sign in with their own email and password.</p>'
++'<label class="chk" style="margin:0 0 6px"><input type="checkbox" id="cj_k" checked><span>Include the workspace password (no password question on the new device)</span></label>'
++'<p class="hint" style="margin:0 0 8px;color:var(--amber)">Anyone who gets a link or file that includes it can read the workspace data. Send the link privately.</p>'
++'<div class="bar" style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" id="cj_l">Copy device link</button><button type="button" id="cj_f">Download cloud-config.js</button></div>'
++'<textarea id="cj_o" readonly rows="3" hidden style="width:100%;margin-top:8px;font-size:12px"></textarea><p class="hint" id="cj_m" style="margin:6px 0 0"></p></div>');
+function cfgNow(){
+ var d=window.LD_CLOUD||{},s={};try{s=JSON.parse(LS.ld_cfg||"{}")}catch(e){}
+ var p="provider" in s?s.provider:(d.provider||"");if(!p)return null;
+ var a=Object.assign({},d[p]||{}),b=s[p]||{};for(var k in b)if(b[k])a[k]=b[k];
+ var w="workspace" in s?s.workspace:(d.workspace||""),pl="poll" in s?s.poll:(d.poll||""),c={provider:p,workspace:w,poll:pl};c[p]=a;
+ return{c:c,key:LS.ld_key||d.key||""}}
+function gate(){if(typeof deny==="function"&&deny("settings"))return null;var x=cfgNow();var m=el("cj_m");
+ if(!x){m.textContent="Connect cloud storage first (Configure above).";return null}
+ if(!x.key&&el("cj_k").checked){m.textContent="No workspace password is saved on this device yet. Open Configure and enter it, or untick the box.";return null}
+ return x}
+el("cj_l").onclick=function(){var x=gate();if(!x)return;
+ var link=location.origin+location.pathname+"#join="+LD_JOIN.encode(x.c,el("cj_k").checked?x.key:""),o=el("cj_o");
+ o.hidden=false;o.value=link;o.select();
+ var ok=function(){el("cj_m").textContent=(web?"Link copied. ":"")+"Open it once on the other device; after that it stays connected."+(web?"":" This app is opened from a file, so host it on a web address first or the link will not work on other devices.")};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(link).then(ok,function(){try{document.execCommand("copy")}catch(e){}ok()});else{try{document.execCommand("copy")}catch(e){}ok()}};
+el("cj_f").onclick=function(){var x=gate();if(!x)return;
+ var c=Object.assign({},x.c);if(el("cj_k").checked&&x.key)c.key=x.key;
+ var t="/* Letter Desk cloud settings. Upload this file next to index.html. Every device that opens the site connects automatically. */\nwindow.LD_CLOUD = "+JSON.stringify(c,null,2)+";\n";
+ var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/javascript"}));a.download="cloud-config.js";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+ el("cj_m").textContent="Downloaded. Put cloud-config.js in the same folder as index.html on your web host."+(el("cj_k").checked?" It contains the workspace password, so keep the site private.":"")}
 })();
 </script>
 </body>
