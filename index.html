@@ -755,6 +755,8 @@ function build(kind){
   var c=cur();if(!c)return null;
   var dates=c.items.map(function(e){return e.vt}).filter(Boolean).sort(),first=dates[0]||"",today=todayKey();
   var base={client_name:c.name,date:fmt(today),sender:S.sender,valid_till:longDate(first),status:first&&first<today?"expired on":"will expire on"};
+  var multi=c.items.filter(function(e,i,a){return a.findIndex(function(x){return key(x.cn)===key(e.cn)})===i}).length>1,xe=c.items.filter(function(e){return e.vt&&e.vt<today}).length,xu=c.items.filter(function(e){return e.vt&&e.vt>=today}).length,MS=xe&&!xu?"has expired":xu&&!xe?"will expire soon":xe?"has expired or will expire soon":"is due for renewal";
+  function mt(t){return multi?String(t).replace(/validity for \{\{client_name\}\}\s+\{\{status\}\}\s+\{\{valid_till\}\}\./,"validity "+MS+". For your concern, we are sharing the client details below for your perusal."):t}
   var pc=contact(c.name),pt=pc.mdt==="__o"?(pc.mdo||""):(pc.mdt||"");
   base.ref_no=pc.ref||"";base.ref_line=pc.ref?"Ref: "+pc.ref:"";base.md_name=pc.md||"";base.md_title=pt;base.company_name=c.name;base.address=pc.addr||"";
   base.attn_name=pc.an||"";base.attn_designation=pc.ad||"";base.attention_line=pc.att&&(pc.an||pc.ad)?"Attention: "+[pc.an,pc.ad].filter(Boolean).join(", "):"";
@@ -763,8 +765,8 @@ function build(kind){
   var wa=kind==="wa",plain=wa?waEntries(c):tableText(c.items);
   var dl=S.docs.map(function(x,i){return(wa?"\u2022 ":(i+1)+". ")+x}).join("\n");
   var o={subject:oneLine(fill(S.tpl.sub,Object.assign({entries:"",documents:""},base)))};
-  if(wa){o.body=fill(S.tpl.wa,Object.assign({entries:plain,documents:dl},base));return o}
-  var tk=kind==="letter"&&pc.ltype==="proposal"?"proposal":kind,tpl=isHtml(S.tpl[tk])?S.tpl[tk]:mkH(S.tpl[tk]);
+  if(wa){o.body=fill(mt(S.tpl.wa),Object.assign({entries:plain,documents:dl},base));return o}
+  var tk=kind==="letter"&&pc.ltype==="proposal"?"proposal":kind,tpl=mt(isHtml(S.tpl[tk])?S.tpl[tk]:mkH(S.tpl[tk]));
   var h=fillH(tpl,Object.assign({entries:"\u0001",documents:"\u0002"},base));
   h=h.replace(/<br><br>(\u0002)/,"<br>$1").split("\u0001").join(pc.ltype==="proposal"?(c.items.length>1?propTable(c.items):""):tableHtml(c.items)).split("\u0004").join(sg.img?'<img src="'+esc(sg.img)+'" alt="" style="display:block;max-height:60px;max-width:220px">':"").split("\u0002").join(docsHtml()).replace(/(<\/table>|<\/ol>)<br><br>/g,"$1<br>");
   if(tk==="proposal")h=h.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");h=h.replace(/(<br\s*\/?>\s*){3,}/gi,"<br><br>").replace(/^(\s|<br\s*\/?>)+/i,"");var tmp=document.createElement("div");tmp.innerHTML=h;
@@ -2596,12 +2598,12 @@ function chOK(ch,n){var c=contact(n);if(ch==="letter")return true;if(c.ltype==="
 function chWhy(ch,n){return contact(n).ltype==="proposal"?"Proposal \u2013 letter only":ch==="email"?"No email saved (add it in Clients)":"No WhatsApp number saved (add it in Clients)"}
 var CHL={email:"Email",wa:"WhatsApp",letter:"Letter"};
 function gact(g){var ns=[];g.items.forEach(function(r){if(ns.indexOf(r.e.cn)<0)ns.push(r.e.cn)});GM[g.k]={name:g.name,items:g.items,ns:ns};
- return'<span class="gact">'+["email","wa","letter"].map(function(k){var n=ns.filter(function(m){return chOK(k,m)}).length;return'<button type="button" class="sb" data-gsend="'+k+'" data-gk="'+esc(g.k)+'"'+(n?"":" disabled")+' title="Process '+CHL[k]+' for every client in this group">'+CHL[k]+(k==="letter"?"s":"")+' <b>'+n+'</b></button>'}).join("")+'</span>'}
+ return'<span class="gact">'+["email","wa","letter"].map(function(k){var n=ns.filter(function(m){return chOK(k,m)}).length;return'<button type="button" class="sb" data-gsend="'+k+'" data-gk="'+esc(g.k)+'"'+(n?"":" disabled")+' title="Process '+CHL[k]+' for every client in this group">'+CHL[k]+(k==="letter"?"s":"")+' <b>'+n+'</b></button>'}).join("")+'<button type="button" class="sb" data-gnotify="'+esc(g.k)+'" title="Share a notification with the clients, branches or banks in this group">Notify</button></span>'}
 function rowH(r){
  var e=r.e,P=isP(e),s=r.s,sm=SM[key(e.cn)]||{},rk=s&&s.k!=="wait"?s.k:"";
  var sel='<select data-js="'+r.i+'" aria-label="Job status">'+JS.map(function(j){return"<option"+(j===r.j?" selected":"")+">"+j+"</option>"}).join("")+"</select>";
  var bt=function(k){var ok=chOK(k,e.cn);return'<button type="button" class="sb'+(rk===k?" rec":"")+'" data-send="'+k+'" data-i="'+r.i+'"'+(ok?"":" disabled")+' title="'+(ok?CHL[k]+" this client"+(rk===k?" (suggested)":""):chWhy(k,e.cn))+'">'+CHL[k]+"</button>"};
- var nx='<div class="sendr">'+bt("email")+bt("wa")+bt("letter")+'<button type="button" class="sb ed" data-act="'+r.i+'" data-k="'+(rk||"email")+'" title="Edit and compose" aria-label="Edit and compose">\u270E</button></div>'+(s?'<div class="sgw"><span class="sgb sg-'+s.k+'">'+esc(s.t)+'</span><span class="hint" title="'+esc(s.why)+'">'+esc(s.why)+"</span></div>":"");
+ var nx='<div class="sendr">'+bt("email")+bt("wa")+bt("letter")+'<button type="button" class="sb ed" data-act="'+r.i+'" data-k="'+(rk||"email")+'" title="Edit and compose" aria-label="Edit and compose">\u270E</button><button type="button" class="sb" data-nrow="'+r.i+'" title="Share a notification with the client, its branch or its bank">Notify</button></div>'+(s?'<div class="sgw"><span class="sgb sg-'+s.k+'">'+esc(s.t)+'</span><span class="hint" title="'+esc(s.why)+'">'+esc(s.why)+"</span></div>":"");
  var tk=(sm.Email?'<span class="cbs">\u2713 Email</span>':"")+(sm.WhatsApp?'<span class="cbs">\u2713 WhatsApp</span>':"")+(sm.Letter?'<span class="cbs">\u2713 Letter</span>':"");
  return'<tr'+(Sel.has(e)?' class="sel"':"")+'><td class="tc"><input type="checkbox" data-sel="'+r.i+'"'+(Sel.has(e)?" checked":"")+' aria-label="Select client"></td><td class="tn">'+avatar(e.cn)+'<span class="nm">'+esc(e.cn)+tk+'</span></td><td data-l="Bank">'+(P?"Proposal":esc(e.bn||""))+'</td><td data-l="Branch">'+(P?esc(e.cc||""):esc(e.br||""))+'</td><td data-l="Rating">'+esc(e.rt||"")+'</td><td data-l="Valid till">'+esc(shortDate(e.vt))+(e.vt?' <span class="bd '+r.st.k+'">'+esc(r.st.t)+"</span>":"")+'</td><td data-l="Job status">'+sel+'</td><td class="nxt tx">'+nx+"</td></tr>"}
 function filtered(){
@@ -2638,7 +2640,7 @@ function render(){
   g.items.sort(function(a,b){return cmp(a,b,B.sort)||cmp(a,b,"cn")});
   var mc=B.by==="js"?"":'<span class="gc">'+JS.map(function(j){var n=g.items.filter(function(r){return r.j===j}).length;return n?'<span class="bd '+JCLS[j]+'">'+j+" "+n+"</span>":""}).join("")+"</span>";
   return'<details class="bg" data-g="'+esc(g.k)+'"'+((OPEN[B.by+"|"+g.k]!==undefined?OPEN[B.by+"|"+g.k]:open)?" open":"")+"><summary><b>"+esc(g.name)+'</b><span class="chip">'+g.items.length+"</span>"+gact(g)+mc+'</summary><div class="wrap"><table class="bt"><colgroup><col class="k0"><col class="k1"><col class="k2"><col class="k3"><col class="k4"><col class="k5"><col class="k6"><col class="k7"></colgroup><thead><tr><th><input type="checkbox" data-gsel="'+g.items.map(function(r){return r.i}).join(",")+'"'+(g.items.every(function(r){return Sel.has(r.e)})?" checked":"")+' aria-label="Select all in this group"></th><th>Client</th><th>Bank</th><th>Branch</th><th>Rating</th><th>Valid till</th><th>Job status</th><th>Send / next step</th></tr></thead><tbody>'+g.items.map(rowH).join("")+"</tbody></table></div></details>"}).join("")}
-function selBar(){var n=Sel.size;$("bdSel").innerHTML=n?'<div class="bsg"><b>'+n+' selected</b><span class="gact">'+["email","wa","letter"].map(function(k){return'<button type="button" class="sb rec" data-ssend="'+k+'">'+CHL[k]+(k==="letter"?"s":"")+" \u25B8</button>"}).join("")+'</span><label style="display:flex;gap:6px;align-items:center">Set job status <select id="bdSelJs">'+JS.map(function(j){return"<option>"+j+"</option>"}).join("")+'</select></label><button class="pri" id="bdSelGo" type="button">Apply</button><button id="bdSelExp" type="button">Export selected</button><button class="link" id="bdSelClr" type="button">Clear selection</button></div>':""}
+function selBar(){var n=Sel.size;$("bdSel").innerHTML=n?'<div class="bsg"><b>'+n+' selected</b><span class="gact">'+["email","wa","letter"].map(function(k){return'<button type="button" class="sb rec" data-ssend="'+k+'">'+CHL[k]+(k==="letter"?"s":"")+" \u25B8</button>"}).join("")+'<button type="button" class="sb rec" data-snotify="1">Notify \u25B8</button></span><label style="display:flex;gap:6px;align-items:center">Set job status <select id="bdSelJs">'+JS.map(function(j){return"<option>"+j+"</option>"}).join("")+'</select></label><button class="pri" id="bdSelGo" type="button">Apply</button><button id="bdSelExp" type="button">Export selected</button><button class="link" id="bdSelClr" type="button">Clear selection</button></div>':""}
 function exportSel(){var rows=[["Client","Bank","Branch","Rating type","Valid till","Status","Job status","Suggested next step","Email","WhatsApp"]];
  S.entries.forEach(function(e){if(!Sel.has(e))return;var c=contact(e.cn),j=jobOf(e);rows.push([e.cn,e.bn||"",e.br||"",e.rt||"",e.vt||"",statusOf(e.vt).t,j,j==="On Track"?sug(e).t:"",c.email||"",c.wa||""])});
  dl("selected-clients.csv",toCsv(rows))}
@@ -2862,6 +2864,8 @@ $("bdSug").onclick=function(e){var b=e.target.closest("[data-sg]");if(!b)return;
 $("bdList").onchange=function(e){var cb=e.target.closest("input[data-sel],input[data-gsel]");if(cb){if(cb.dataset.sel!==undefined){var en0=S.entries[+cb.dataset.sel];if(en0){if(cb.checked)Sel.add(en0);else Sel.delete(en0)}}else cb.dataset.gsel.split(",").forEach(function(ix){var en1=S.entries[+ix];if(en1){if(cb.checked)Sel.add(en1);else Sel.delete(en1)}});render();return}var s=e.target.closest("select[data-js]");if(!s||deny("edit")){if(s)render();return}
  var en=S.entries[+s.dataset.js];if(!en)return;var old=jobOf(en);en.js=s.value;logIt("Job","Status",old+" \u2192 "+en.js+(en.bn?" \u2013 "+en.bn+" "+en.br:""),en.cn);save();renderAll()};
 $("bdList").onclick=function(e){
+ var gn=e.target.closest("[data-gnotify]");if(gn){e.preventDefault();var o2=GM[gn.dataset.gnotify];if(o2&&window.LDnotify)LDnotify(o2.items.map(function(r){return r.e}),o2.name);return}
+ var nr=e.target.closest("[data-nrow]");if(nr){var en2=S.entries[+nr.dataset.nrow];if(en2&&window.LDnotify)LDnotify([en2],en2.cn);return}
  var g=e.target.closest("[data-gsend]");if(g){e.preventDefault();var o=GM[g.dataset.gk];if(o&&window.LDrun)LDrun(g.dataset.gsend,o.ns.slice(),o.name,1,new Set(o.items.map(function(r){return r.e})));return}
  var sd=e.target.closest("[data-send]");if(sd){var en=S.entries[+sd.dataset.i];if(en&&window.LDrun)LDrun(sd.dataset.send,[en.cn],en.cn,0);return}
  var b=e.target.closest("[data-act]");if(b)openCompose(+b.dataset.act,b.dataset.k)};
@@ -2870,6 +2874,7 @@ $("bdExp").onclick=exportCsv;$("bdUndo").onclick=undo;
 $("bdList").addEventListener("toggle",function(e){var d=e.target;if(d&&d.dataset&&d.dataset.g!==undefined)OPEN[B.by+"|"+d.dataset.g]=d.open},true);
 $("bdAll").onclick=function(){var all=lastList.length&&lastList.every(function(r){return Sel.has(r.e)});lastList.forEach(function(r){if(all)Sel.delete(r.e);else Sel.add(r.e)});render()};
 $("bdSel").onclick=function(e){var b=e.target.closest("button");if(!b)return;
+ if(b.dataset.snotify){if(window.LDnotify)LDnotify(Array.from(Sel),"Selected clients");return}
  if(b.dataset.ssend){var ns=[];Sel.forEach(function(en){if(ns.indexOf(en.cn)<0)ns.push(en.cn)});if(window.LDrun)LDrun(b.dataset.ssend,ns,"Selected clients",1,new Set(Sel));return}
  if(b.id==="bdSelClr"){Sel.clear();render()}
  else if(b.id==="bdSelExp")exportSel();
@@ -3157,5 +3162,151 @@ try{renderClients()}catch(e){}
 #pDmap .dmt td{padding:4px 8px;vertical-align:middle}
 #pDmap .dmt input,#pDmap .dmt select{width:100%;box-sizing:border-box;min-width:0}
 </style>
+<script>
+/* Remember a new designation and its role when a member is saved */
+(function(){
+var _u=$("uAdd").onclick,_h=dHint;
+$("uAdd").onclick=function(){
+  var d=$("uD").value.trim().replace(/\s+/g," "),r=$("uR").value,n0=S.users.length,ed=S.uEdit;
+  _u.call(this);
+  if(!d||!can("users")||desigs().some(function(x){return key(x)===key(d)}))return;
+  setTimeout(function(){
+    var done=ed?S.users.some(function(u){return u.id===ed&&key(u.desig||"")===key(d)&&u.role===r}):S.users.length>n0;
+    if(!done||desigs().some(function(x){return key(x)===key(d)}))return;
+    var L=desigs().slice(),m=Object.assign({},S.policy.dmap||{});L.push(d);m[key(d)]=r;setDes(L,m);
+    try{renderUsersX();renderDmap(true)}catch(e){}
+    toast("Designation \u201C"+d+"\u201D added to the list as "+ROLES[r].n)
+  },400)
+};
+dHint=function(live){
+  _h(live);
+  var v=$("uD").value.trim();if(!v||live||!can("users"))return;
+  if(!desigs().some(function(x){return key(x)===key(v)}))
+    $("uRH").textContent="New designation. Pick the role here; it is saved to the designation list so the next member with this designation gets it automatically."
+};
+$("uD").onchange=function(){dHint(false)};$("uD").oninput=function(){dHint(true)};
+})();
+</script>
+<style>
+/* ===== Client board: filter bar ===== */
+#v-board .bbar:not(#bdChips){display:grid;grid-template-columns:repeat(4,minmax(120px,1fr)) minmax(170px,1.5fr);gap:10px 14px;align-items:end;margin:12px 0}
+#v-board .bbar:not(#bdChips)>label{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin:0;font-size:12px;font-weight:600;color:var(--mute);white-space:nowrap;min-width:0}
+#v-board .bbar:not(#bdChips)>label select{width:100%;max-width:none;min-width:0;height:36px;box-sizing:border-box;font-size:13.5px;font-weight:400;color:var(--text,inherit)}
+#v-board .bbar:not(#bdChips)>input[type=search]{width:100%;max-width:none;min-width:0;height:36px;box-sizing:border-box;margin:0;flex:none;font-size:13.5px}
+@media(max-width:900px){#v-board .bbar:not(#bdChips){grid-template-columns:repeat(2,minmax(0,1fr))}#v-board .bbar:not(#bdChips)>input[type=search]{grid-column:1 / -1}}
+</style>
+<style>
+#d_nt .ntg,#d_ntq .ntg{display:flex;gap:6px 26px;flex-wrap:wrap;margin:10px 0;align-items:center}
+#d_nt .ntg>div{display:flex;gap:6px 14px;align-items:center;flex-wrap:wrap}
+#d_nt .ntg b{min-width:86px}#d_nt .ntg label{display:flex;gap:5px;align-items:center}
+#d_nt .ntl2{display:block;margin:10px 0 0;font-weight:600;font-size:12px}
+#d_nt .ntl2 input,#d_nt .ntl2 textarea{width:100%;box-sizing:border-box;font-weight:400;font-size:13.5px;margin-top:3px}
+#d_nt .ntt{table-layout:auto;width:100%}#d_nt .ntt input:not([type=checkbox]){width:100%;box-sizing:border-box}
+#d_nt .wrap{max-height:220px;overflow:auto}
+#bdSched .ntl{width:100%;font-size:13px}#bdSched .ntl td,#bdSched .ntl th{padding:5px 8px;text-align:left}
+</style>
+<script>
+/* ===== Client board: share notification with client / branch / bank, with time of communication ===== */
+(function(){
+var L=window.LDc,CHN={email:"Email",wa:"WhatsApp",letter:"Letter"},TY={client:"Client",branch:"Branch",bank:"Bank"},N={},Q=null,seen={};
+var DEFM="Dear {recipient},\n\nThis is to inform you about the credit rating status of the following:\n{details}\n\nKindly note this and let us know if you need any support from us.\n\nBest regards,\n";
+S.notices=S.notices||[];S.bc=S.bc||{};
+var _pl=payload;payload=function(){var p=_pl();p.notices=S.notices;p.bc=S.bc;return p};
+var _ad=applyData;applyData=function(d){_ad(d);if(d&&d.notices)S.notices=d.notices;if(d&&d.bc)S.bc=d.bc};
+try{var d0=JSON.parse(localStorage.getItem("letterdesk")||"{}");if(d0.notices)S.notices=d0.notices;if(d0.bc)S.bc=d0.bc}catch(e){}
+function dtl(ms){var d=new Date(ms);return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate())+"T"+pad2(d.getHours())+":"+pad2(d.getMinutes())}
+function fmt(ms){return new Date(ms).toLocaleString([],{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}
+function rg(nm,opts,cur){return opts.map(function(o){return'<label><input type="radio" name="'+nm+'" data-r="'+nm+'" value="'+o[0]+'"'+(o[0]===cur?" checked":"")+'> '+o[1]+'</label>'}).join("")}
+function line(e){return"\u2022 "+e.cn+(e.bn?" \u2013 "+e.bn+(e.br?", "+e.br:""):"")+(e.rt?" \u2013 "+e.rt:"")+" \u2013 valid till "+(e.vt?shortDate(e.vt)+" ("+statusOf(e.vt).t+")":"not set")}
+function targets(t){var m={},o=[];N.e.forEach(function(e){
+  if(t!=="client"&&!e.bn)return;
+  var id=t==="client"?"c:"+key(e.cn):t==="branch"?"r:"+key(e.bn)+"|"+key(e.br||""):"b:"+key(e.bn),
+  lab=t==="client"?e.cn:t==="branch"?e.bn+(e.br?" \u2013 "+e.br+" branch":" (head office)"):e.bn;
+  if(!m[id]){m[id]={id:id,label:lab,lines:[],names:[]};o.push(m[id])}
+  m[id].lines.push(line(e));if(m[id].names.indexOf(e.cn)<0)m[id].names.push(e.cn)});
+  return o}
+function cget(x){return N.type==="client"?contact(x.names[0]):(S.bc[x.id]||{})}
+function cset(x,f,v){if(N.type==="client"){setContact(x.names[0],f,v);return}S.bc[x.id]=S.bc[x.id]||{};S.bc[x.id][f]=v;save()}
+var D=document.createElement("dialog");D.id="d_nt";D.className="sdlg wide";document.body.appendChild(D);
+var Q2=document.createElement("dialog");Q2.id="d_ntq";Q2.className="sdlg wide";document.body.appendChild(Q2);
+function draw(){
+  var t=N.type,c=N.ch,tg=targets(t);
+  var h='<div class="dh"><h2>Share notification</h2><button class="ib" id="ntX" aria-label="Close">'+icn("x")+'</button></div><p class="hint">'+esc(N.label)+' \u2013 '+N.e.length+' entr'+(N.e.length===1?"y":"ies")+'</p>';
+  h+='<div class="ntg"><div><b>Send to</b>'+rg("type",[["client","Client"],["branch","Branch"],["bank","Bank"]],t)+'</div><div><b>Share by</b>'+rg("ch",[["email","Email"],["wa","WhatsApp"],["letter","Letter"]],c)+'</div></div>';
+  h+=tg.length?'<div class="wrap"><table class="ntt"><thead><tr><th></th><th>Recipient</th>'+(c==="email"?"<th>Email</th>":c==="wa"?"<th>WhatsApp</th>":"")+'<th>Entries</th></tr></thead><tbody>'+tg.map(function(x){var ct=cget(x);return'<tr><td><input type="checkbox" data-ck="'+esc(x.id)+'"'+(N.off[x.id]?"":" checked")+'></td><td>'+esc(x.label)+'</td>'+(c==="email"?'<td><input data-id="'+esc(x.id)+'" data-f="email" value="'+esc(ct.email||"")+'" placeholder="name@bank.com"></td>':c==="wa"?'<td><input data-id="'+esc(x.id)+'" data-f="wa" inputmode="tel" value="'+esc(ct.wa||"")+'" placeholder="8801XXXXXXXXX"></td>':"")+'<td>'+x.lines.length+'</td></tr>'}).join("")+'</tbody></table></div>':'<p class="hint">These entries have no bank recorded, so choose Client.</p>';
+  if(c!=="wa")h+='<label class="ntl2">Subject<input id="ntS" value="'+esc(N.s)+'"></label>';
+  h+='<label class="ntl2">Message<textarea id="ntM" rows="8">'+esc(N.m)+'</textarea></label><p class="hint">{recipient} and {details} are filled in for each recipient. Edit the wording freely.</p>';
+  h+='<div class="ntg"><div><b>When</b>'+rg("when",[["now","Now"],["later","Schedule"]],N.when)+(N.when==="later"?'<input type="datetime-local" id="ntAt" value="'+esc(N.at)+'" aria-label="Date and time">':"")+'</div></div>';
+  h+='<p class="hint">Browsers cannot send by themselves. At the chosen time, Letter Desk (while it is open) shows the notification as due and opens it ready to send.</p><p class="hint" id="ntMsg" style="color:#c42b1c"></p><div class="bar"><button class="pri" id="ntGo">'+(N.when==="later"?"Schedule":"Open now")+'</button><button id="ntCx">Cancel</button></div>';
+  D.innerHTML=h
+}
+window.LDnotify=function(entries,label){
+  if(deny("send"))return;if(!entries.length){toast("Select at least one client");return}
+  N={e:entries.slice(),label:label,type:"client",ch:"email",when:"now",s:"Credit rating notification",m:DEFM+me().name,at:dtl(Math.ceil(Date.now()/36e5)*36e5),off:{}};
+  draw();if(!D.open)D.showModal()};
+D.onchange=function(ev){var t=ev.target,d=t.dataset;
+  if(d.r){N[d.r]=t.value;if(d.r==="type")N.off={};draw();return}
+  if(d.ck!==undefined){N.off[d.ck]=!t.checked;return}
+  if(d.f){var x=targets(N.type).filter(function(y){return y.id===d.id})[0];if(x)cset(x,d.f,t.value.trim());return}
+  if(t.id==="ntAt")N.at=t.value};
+D.oninput=function(ev){var t=ev.target;if(t.id==="ntS")N.s=t.value;if(t.id==="ntM")N.m=t.value;if(t.id==="ntAt")N.at=t.value};
+D.onclick=function(ev){var b=ev.target.closest("button");if(!b)return;
+  if(b.id==="ntX"||b.id==="ntCx"){D.close();return}
+  if(b.id!=="ntGo")return;
+  var items=targets(N.type).filter(function(x){return!N.off[x.id]}).map(function(x){var c=cget(x);return{label:x.label,names:x.names,lines:x.lines.join("\n"),email:mails(c.email||"").filter(function(m){return EM.test(m)}).join(", "),wa:L.waNum(c.wa||""),done:0}}),msg=$("ntMsg");
+  if(!items.length){msg.textContent="Tick at least one recipient.";return}
+  var n={id:"n"+Date.now().toString(36),ch:N.ch,type:N.type,subj:N.s,body:N.m,items:items,at:0,status:"pending",by:me().name,label:N.label};
+  if(N.when==="later"){var at=new Date(N.at).getTime();if(!at||at<Date.now()-60000){msg.textContent="Choose a date and time that has not passed.";return}
+    n.at=at;S.notices.push(n);save();D.close();sched();toast("Scheduled for "+fmt(at));return}
+  D.close();openQ(n)};
+/* ---- sending ---- */
+function skip(n,it){return n.ch==="email"?!it.email:n.ch==="wa"?!it.wa:false}
+function fill(n,it,t){return t.replace(/\{recipient\}/g,it.label).replace(/\{details\}/g,it.lines)}
+function logNt(n,it){logIt(CHN[n.ch],n.type==="client"?"Opened for sending":"Notification opened","Notice to "+TY[n.type].toLowerCase()+": "+it.label+(n.at?" (scheduled "+fmt(n.at)+")":""),n.type==="client"?it.names[0]:"")}
+function finish(n){var all=n.items.every(function(x){return x.done||skip(n,x)});if(all&&n.items.some(function(x){return x.done})&&S.notices.indexOf(n)>=0&&n.status!=="done"){n.status="done";n.doneAt=Date.now()}if(S.notices.indexOf(n)>=0)save()}
+function openIt(i,quiet){var n=Q,it=n.items[i];if(it.done||skip(n,it))return;
+  var body=fill(n,it,n.body),sub=fill(n,it,n.subj);
+  if(n.ch==="email")window.open(L.mailUrl(S.mailapp,it.email,"","",sub,body.replace(/\r?\n/g,"\r\n")),"_blank");
+  else{var u=L.waUrl(it.wa,body);if(S.comm.wm==="desk")location.href=u;else window.open(u,"_blank")}
+  it.done=1;logNt(n,it);finish(n);if(!quiet)qdraw()}
+function qdraw(){
+  var n=Q,pl=n.ch==="letter",left=n.items.filter(function(x){return!x.done&&!skip(n,x)}).length;
+  var h='<div class="dh"><h2>'+CHN[n.ch]+' \u2013 '+TY[n.type]+' notification</h2><button class="ib" id="qX" aria-label="Close">'+icn("x")+'</button></div><p class="hint">'+(n.at?"Scheduled for "+fmt(n.at)+". ":"")+esc(n.label)+'</p>';
+  h+='<div class="wrap"><table><thead><tr><th>Recipient</th><th>'+(n.ch==="email"?"To":n.ch==="wa"?"Number":"Type")+'</th><th>Status</th><th></th></tr></thead><tbody>'+n.items.map(function(x,i){var sk=skip(n,x);return'<tr><td>'+esc(x.label)+'</td><td>'+esc(n.ch==="email"?x.email:n.ch==="wa"?(x.wa?"+"+x.wa:""):"Letter")+'</td><td>'+(x.done?"\u2713 Done":sk?"Skipped \u2013 no "+(n.ch==="email"?"email":"number"):"Pending")+'</td><td>'+(!pl&&!x.done&&!sk?'<button class="sb" data-i="'+i+'">Open</button>':"")+'</td></tr>'}).join("")+'</tbody></table></div><div class="bar" style="margin-top:10px">';
+  h+=pl?'<button class="pri" id="qPrn"'+(left?"":" disabled")+'>Print / Save PDF ('+left+')</button>':'<button class="pri" id="qNext"'+(left?"":" disabled")+'>Open next ('+left+' left)</button><button id="qAll"'+(left?"":" disabled")+'>Open all</button>';
+  Q2.innerHTML=h+'<button id="qX2">Close</button></div>';if(!Q2.open)Q2.showModal()}
+function openQ(n){Q=n;qdraw()}
+Q2.addEventListener("close",function(){sched()});
+Q2.onclick=function(ev){var b=ev.target.closest("button");if(!b)return;
+  if(b.id==="qX"||b.id==="qX2"){Q2.close();return}
+  if(b.dataset.i!==undefined){openIt(+b.dataset.i);return}
+  if(b.id==="qNext"){var k=-1;Q.items.some(function(x,i){if(!x.done&&!skip(Q,x)){k=i;return true}});if(k>=0)openIt(k);return}
+  if(b.id==="qAll"){Q.items.forEach(function(x,i){openIt(i,1)});qdraw();return}
+  if(b.id==="qPrn"){
+    var its=Q.items.filter(function(x){return!x.done}),P=document.getElementById("bulkPrint"),n=Q;
+    P.innerHTML=its.map(function(it){return'<div class="bl"><p style="text-align:right">'+esc(shortDate(todayKey()))+'</p><p>To,<br>'+esc(it.label)+'</p><p><b>Subject: '+esc(fill(n,it,n.subj))+'</b></p><p>'+esc(fill(n,it,n.body)).replace(/\n/g,"<br>")+'</p></div>'}).join("");
+    Q2.close();var t=document.title;document.title="Notifications";document.body.classList.add("bulkprint");
+    var end=function(){document.body.classList.remove("bulkprint");document.title=t;P.innerHTML=""};
+    window.addEventListener("afterprint",end,{once:true});
+    try{window.print();its.forEach(function(it){it.done=1;logNt(n,it)});finish(n)}catch(e){toast("Printing is not available here")}
+    setTimeout(end,60000)}};
+/* ---- scheduled list ---- */
+var SC=document.createElement("div");SC.id="bdSched";var bl=document.getElementById("bdList");bl.parentNode.insertBefore(SC,bl);
+function sched(){
+  var ns=S.notices.slice().sort(function(a,b){return a.at-b.at}),now=Date.now();
+  if(!ns.length){SC.innerHTML="";return}
+  var due=ns.filter(function(n){return n.status==="pending"&&n.at<=now}).length;
+  SC.innerHTML='<div class="bsg" style="display:block"><b>Scheduled notifications</b>'+(due?' <span class="bd exp">'+due+' due now</span>':"")+'<div class="wrap"><table class="ntl"><thead><tr><th>Time</th><th>To</th><th>By</th><th>Status</th><th></th></tr></thead><tbody>'+ns.map(function(n){var d=n.status==="done";return'<tr><td>'+esc(fmt(n.at))+'</td><td>'+esc(TY[n.type])+' \u2013 '+n.items.length+' recipient'+(n.items.length>1?"s":"")+' <span class="hint">'+esc(n.label)+'</span></td><td>'+CHN[n.ch]+'</td><td>'+(d?"Done":n.at<=now?'<span class="bd exp">Due</span>':"Scheduled")+'</td><td style="white-space:nowrap">'+(d?"":'<button class="sb" data-no="'+n.id+'">Open</button> ')+'<button class="sb" data-nd="'+n.id+'">Delete</button></td></tr>'}).join("")+'</tbody></table></div></div>'}
+SC.onclick=function(ev){var b=ev.target.closest("button");if(!b)return;
+  if(b.dataset.no){if(deny("send"))return;var n=S.notices.filter(function(x){return x.id===b.dataset.no})[0];if(n)openQ(n)}
+  else if(b.dataset.nd){if(!confirm("Delete this scheduled notification?"))return;S.notices=S.notices.filter(function(x){return x.id!==b.dataset.nd});save();sched()}};
+function tick(){
+  var now=Date.now(),d=S.notices.filter(function(n){return n.status==="pending"&&n.at<=now&&!seen[n.id]});
+  if(d.length){d.forEach(function(n){seen[n.id]=1});toast(d.length+" scheduled notification"+(d.length>1?"s are":" is")+" due \u2013 open Client board")}
+  sched()}
+var _sv=showView;showView=function(v){_sv(v);if(v==="board")sched()};
+setInterval(tick,30000);setTimeout(tick,1500);sched();
+})();
+</script>
 </body>
 </html>
