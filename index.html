@@ -683,10 +683,10 @@ body.locked .shell,body.locked .top,body.locked .btabs,body.locked .fab,body.loc
 <div class="srow"><h2>Roles and access</h2><button class="ib" data-dlg="d_roles" title="Roles, access and admins" aria-label="Roles, access and admins"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></button></div>
   <div class="srow"><h2>User policy</h2><button class="ib" data-dlg="d_pol" title="Edit: User policy" aria-label="Edit: User policy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg></button></div>
  </div>
-<dialog id="d_uadd" class="sdlg"><div class="dh"><h2 id="uTitle">Add user</h2><button class="ib" data-close title="Close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="row"><label>Full name<input id="uN" autocomplete="off"></label><label>Work email<input id="uE" type="email" autocomplete="off"></label></div><div class="row"><label>Designation<input id="uD" list="desigList" autocomplete="off" placeholder="Pick or type, e.g. Manager"></label><label>Role (set by designation)<select id="uR"></select></label></div><datalist id="desigList"></datalist><p class="hint" id="uRH" style="margin:2px 0"></p><button type="button" class="link" id="uRUse" hidden></button><div class="row"><label>Status<select id="uS"><option value="1">Active</option><option value="0">Inactive (add now, activate later)</option></select></label><label>Password (min 6 characters)<input id="uP" type="password" autocomplete="new-password"></label></div><div class="bar" style="justify-content:flex-end"><span class="toast" id="uMsg" style="color:var(--warn);flex:1"></span><button class="del ib" id="uDel" title="Delete user" aria-label="Delete user" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13M10 11v6M14 11v6"/></svg></button><button class="ib" id="uCx" title="Cancel" aria-label="Cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="pri ib" id="uAdd" title="Add user" aria-label="Add user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button></div></dialog>
+<dialog id="d_uadd" class="sdlg"><div class="dh"><h2 id="uTitle">Add user</h2><button class="ib" data-close title="Close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="row"><label>Full name<input id="uN" autocomplete="off"></label><label>Work email<input id="uE" type="email" autocomplete="off"></label></div><div class="row"><label>Designation<input id="uD" list="desigList" autocomplete="off" placeholder="Pick or type, e.g. Manager"></label><label>Role (suggested by designation)<select id="uR"></select></label></div><datalist id="desigList"></datalist><p class="hint" id="uRH" style="margin:2px 0"></p><button type="button" class="link" id="uRUse" hidden></button><div class="row"><label>Status<select id="uS"><option value="1">Active</option><option value="0">Inactive (add now, activate later)</option></select></label><label>Password (min 6 characters)<input id="uP" type="password" autocomplete="new-password"></label></div><div class="bar" style="justify-content:flex-end"><span class="toast" id="uMsg" style="color:var(--warn);flex:1"></span><button class="del ib" id="uDel" title="Delete user" aria-label="Delete user" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13M10 11v6M14 11v6"/></svg></button><button class="ib" id="uCx" title="Cancel" aria-label="Cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="pri ib" id="uAdd" title="Add user" aria-label="Add user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button></div></dialog>
 <dialog id="d_pw" class="sdlg"><div class="dh"><h2>Passwords</h2><button class="ib" data-close title="Close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><h3>Change my password</h3><div class="row"><label>Current password<input id="pwO" type="password" autocomplete="current-password"></label><label>New password<input id="pwM" type="password" autocomplete="new-password"></label></div><div class="bar"><button class="pri ib" id="pwChg" title="Change my password" aria-label="Change my password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button></div><h3 style="margin-top:14px">Reset a user's password (Admin)</h3><div class="row"><label>User<select id="pwU"></select></label><label>New password<input id="pwN" type="password" autocomplete="new-password"></label></div><div class="bar"><button class="ib" id="pwSet" title="Set password" aria-label="Set password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button><span class="toast" id="pwMsg"></span></div></dialog>
 <dialog id="d_roles" class="sdlg wide"><div class="dh"><h2>Roles and access</h2><button class="ib" data-close title="Close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div id="rolesBody"></div></dialog>
-<dialog id="d_pol" data-snap class="sdlg"><div class="dh"><h2>User policy</h2></div><div class="row"><label>Default role for new users<select id="pDef"></select></label><label>Allow only this email domain (optional)<input id="pDom" placeholder="e.g. emergingrating.com"></label></div><h3 style="margin:12px 0 2px">Designations and roles</h3><p class="hint" style="margin:0 0 6px">Choose the role each designation receives. When you add a member and pick a designation, the role is filled in automatically (you can still change it for one person).</p><div id="pDmap"></div><div class="bar" style="margin:6px 0"><button type="button" class="ib sx" id="pDmAdd" style="width:auto;padding:0 12px">+ Add designation</button><button type="button" class="ib sx" id="pDmApply" style="width:auto;padding:0 12px" title="Set every existing member's role to the role of their designation">Apply to existing members</button><button type="button" class="ib" id="pDesReset" title="Restore default designations and roles" aria-label="Restore default designations and roles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h11a5 5 0 0 1 0 10H8M4 9l4-4M4 9l4 4"/></svg></button></div><p class="hint" id="pDmMsg" style="margin:0 0 6px"></p><details><summary class="hint" style="cursor:pointer">Paste or edit as text (Designation | Role, one per line)</summary><textarea id="pDes" style="min-height:120px" aria-label="Designations with roles"></textarea></details><label class="chk"><input type="checkbox" id="pInv"><span>Open an invitation email after a user is added</span></label><div class="dft"><button class="ib" data-cancel title="Cancel (undo changes made in this window)" aria-label="Cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="ib pri" data-save title="Save" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button></div></dialog>
+<dialog id="d_pol" data-snap class="sdlg"><div class="dh"><h2>User policy</h2></div><div class="row"><label>Default role for new users (Viewer recommended)<select id="pDef"></select></label><label>Allow only this email domain (optional)<input id="pDom" placeholder="e.g. emergingrating.com"></label></div><h3 style="margin:12px 0 2px">Designations and roles</h3><p class="hint" style="margin:0 0 6px">Choose the role each designation receives. When you add a member and pick a designation, the role is filled in for you (you can still change it for one person). Admin is only ever suggested, never filled in automatically: grant it yourself and keep it to 2\u20133 people.</p><div id="pDmap"></div><div class="bar" style="margin:6px 0"><button type="button" class="ib sx" id="pDmAdd" style="width:auto;padding:0 12px">+ Add designation</button><button type="button" class="ib sx" id="pDmApply" style="width:auto;padding:0 12px" title="Set every existing member's role to the role of their designation">Apply to existing members</button><button type="button" class="ib" id="pDesReset" title="Restore default designations and roles" aria-label="Restore default designations and roles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h11a5 5 0 0 1 0 10H8M4 9l4-4M4 9l4 4"/></svg></button></div><p class="hint" id="pDmMsg" style="margin:0 0 6px"></p><details><summary class="hint" style="cursor:pointer">Paste or edit as text (Designation | Role, one per line)</summary><textarea id="pDes" style="min-height:120px" aria-label="Designations with roles"></textarea></details><label class="chk"><input type="checkbox" id="pInv"><span>Open an invitation email after a user is added</span></label><div class="dft"><button class="ib" data-cancel title="Cancel (undo changes made in this window)" aria-label="Cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="ib pri" data-save title="Save" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button></div></dialog>
 </div>
 <div class="view" id="v-log" hidden>
  <div class="card">
@@ -718,7 +718,7 @@ var $=function(i){return document.getElementById(i)};
 var editing=false;
 var SIGNERS=[{id:"s1",n:"Arifur Rahman FCCA, FCA, CSAA",t:"Chief Executive Officer (CEO)",img:""}];
 var ICN={"pen": "<path d=\"M4 20h4L19 9l-4-4L4 16z\"/><path d=\"M13 7l4 4\"/>", "trash": "<path d=\"M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13M10 11v6M14 11v6\"/>", "plus": "<path d=\"M12 5v14M5 12h14\"/>", "x": "<path d=\"M6 6l12 12M18 6L6 18\"/>", "undo": "<path d=\"M4 9h11a5 5 0 0 1 0 10H8M4 9l4-4M4 9l4 4\"/>", "dl": "<path d=\"M12 4v11M7 11l5 5 5-5M5 20h14\"/>", "ul": "<path d=\"M12 16V5M7 9l5-5 5 5M5 20h14\"/>", "check": "<path d=\"M5 12.5l4.5 4.5L19 7\"/>", "cam": "<path d=\"M4 8h3l2-3h6l2 3h3v11H4z\"/><circle cx=\"12\" cy=\"13\" r=\"3.5\"/>", "ban": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M5.6 5.6l12.8 12.8\"/>", "play": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M10 8.5l5 3.5-5 3.5z\"/>", "save": "<path d=\"M5 4h11l3 3v13H5z\"/><path d=\"M8 4v5h7V4M8 20v-6h8v6\"/>", "folder": "<path d=\"M3 7h6l2 2h10v10H3z\"/>", "user": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M3 20c0-3.5 3-6 6-6s6 2.5 6 6M18 8v6M15 11h6\"/>", "star": "<path d=\"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z\"/>", "mail": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M3 7l9 6 9-6\"/>", "shield": "<path d=\"M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z\"/><path d=\"M9 12l2 2 4-4\"/>", "shieldoff": "<path d=\"M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z\"/><path d=\"M4 4l16 16\"/>"};function icn(n){return'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+ICN[n]+"</svg>"}
-var S={signers:JSON.parse(JSON.stringify(SIGNERS)),refSerial:1,tplLib:[],tplActive:{},autoTpl:true,applyNow:true,entries:[],tpl:JSON.parse(JSON.stringify(DEF)),sender:SIG,tab:"email",grp:"",mailapp:"outlook",banks:BANKS.slice(),docs:DOCS.slice(),layout:{order:[],size:{}},drafts:{},showcc:false,showbcc:false,ui:{theme:"auto",accent:"blue",density:"comfortable",size:"medium"},clients:{},users:[],me:"",policy:{role:"operator",domain:"",invite:true},log:[],view:"dash",q:""};
+var S={signers:JSON.parse(JSON.stringify(SIGNERS)),refSerial:1,tplLib:[],tplActive:{},autoTpl:true,applyNow:true,entries:[],tpl:JSON.parse(JSON.stringify(DEF)),sender:SIG,tab:"email",grp:"",mailapp:"outlook",banks:BANKS.slice(),docs:DOCS.slice(),layout:{order:[],size:{}},drafts:{},showcc:false,showbcc:false,ui:{theme:"auto",accent:"blue",density:"comfortable",size:"medium"},clients:{},users:[],me:"",policy:{role:"viewer",domain:"",invite:true},log:[],view:"dash",q:""};
 function applyData(d){if(d.users)S.users=d.users;if(d.me)S.me=d.me;if(d.policy)S.policy=Object.assign(S.policy,d.policy);if(d.signers&&d.signers.length)S.signers=d.signers;if(d.refSerial)S.refSerial=d.refSerial;if(d.tplLib)S.tplLib=d.tplLib;if(d.tplActive)S.tplActive=d.tplActive;if(d.autoTpl!==undefined)S.autoTpl=d.autoTpl;if(d.applyNow!==undefined)S.applyNow=d.applyNow;if(d.entries)S.entries=d.entries;if(d.tpl){Object.keys(d.tpl).forEach(function(k){d.tpl[k]=String(d.tpl[k]).replace(/Proposal for \{\{client_type\}\}\s*[–-]\s*/g,"Proposal for ").replace(/\{\{client_type\}\}\s?/g,"")});S.tpl=Object.assign(S.tpl,d.tpl)}if(d.sender)S.sender=d.sender;if(d.mailapp)S.mailapp=d.mailapp;if(d.clients)S.clients=d.clients;if(d.log)S.log=d.log;if(d.drafts)S.drafts=d.drafts;if(d.ui)S.ui=Object.assign(S.ui,d.ui);if(d.banks&&d.banks.length)S.banks=d.banks;if(d.layout)S.layout=Object.assign({order:[],size:{}},d.layout);if(d.docs&&d.docs.length)S.docs=d.docs;if(d.tplv===3||d.tplv===4)S.tpl.proposal=DEF.proposal;if(d.tplv!==3&&d.tplv!==4&&d.tplv!==5){if(d.tplv!==2){S.tpl=JSON.parse(JSON.stringify(DEF));S.drafts={}}else S.tpl.wa=DEF.wa;if(S.docs[1]==="One Year Current Account Statement")S.docs[1]=DOCS[1]}["email","letter","proposal"].forEach(function(k){if(!isHtml(S.tpl[k]))S.tpl[k]=mkH(S.tpl[k])})}
 try{var raw=localStorage.getItem("letterdesk");if(raw)applyData(JSON.parse(raw))}catch(e){}
 function payload(){return{entries:S.entries,tpl:S.tpl,sender:S.sender,mailapp:S.mailapp,clients:S.clients,log:S.log,drafts:S.drafts,ui:S.ui,banks:S.banks,docs:S.docs,tplv:5,layout:S.layout,tplLib:S.tplLib,tplActive:S.tplActive,autoTpl:S.autoTpl,applyNow:S.applyNow,refSerial:S.refSerial,signers:S.signers,users:S.users,me:S.me,policy:S.policy}}
@@ -1114,16 +1114,38 @@ $("dStats").onclick=function(ev){var b=ev.target.closest("[data-tile]");if(!b)re
  else if(t==="log"){S.repDay=todayKey();renderLog();showView("log")}
  else showView("clients")};
 
-var ROLES={admin:{n:"Admin",p:"view edit send del tpl settings users",d:"Full access, including users, templates and settings."},manager:{n:"Manager",p:"view edit send del tpl",d:"Add, edit, delete, send, and manage templates."},operator:{n:"Operator",p:"view edit send",d:"Add and edit entries, then send or export. Cannot delete clients or change templates and settings."},viewer:{n:"Viewer",p:"view",d:"Read only. Cannot add, send or export."}};
+var ROLES={admin:{n:"Admin",p:"view edit send del tpl settings users",d:"Full control, including users, roles, templates and settings. Keep to 2\u20133 trusted people.",t:"Managing Director, CEO, Administrator"},manager:{n:"Manager",p:"view edit send del tpl",d:"Runs the day-to-day work: add, edit, delete, send and manage templates. Cannot manage users or settings.",t:"Director, General Manager, Manager"},operator:{n:"Operator",p:"view edit send",d:"Adds and edits entries, then sends or exports. Cannot delete clients or change templates and settings.",t:"Senior Analyst, Analyst, Executive, Officer"},viewer:{n:"Viewer",p:"view",d:"Read only. Cannot add, edit, send or export.",t:"Intern, Auditor, new joiners"}};
+function ADMIN_Q(n){return"Give "+n+" Admin access?\n\nAdmins can manage users, roles, templates and settings. Grant it only to people who need it."}
+function demoteTo(u){var r=roleFor(u.desig);if(r==="admin")return"manager";if(r)return r;return S.policy.role==="admin"?"manager":S.policy.role}
 function ensureUsers(){if(!S.users.length){var l=(S.sender||"").split(/\r?\n/)[0].trim()||"Administrator",e=((S.sender||"").match(/\S+@\S+/)||[""])[0];S.users=[{id:"u1",name:l,email:e,role:"admin",on:true,added:todayKey(),by:"System"}]}if(!S.users.some(function(u){return u.id===S.me&&u.on}))S.me=(S.users.filter(function(u){return u.on})[0]||S.users[0]).id}
 function me(){ensureUsers();return S.users.filter(function(u){return u.id===S.me})[0]||{}}
 function can(a){return(" "+((ROLES[me().role]||{}).p||"")+" ").indexOf(" "+a+" ")>=0}
 function deny(a){if(can(a))return false;toast("Your role ("+((ROLES[me().role]||{}).n||"none")+") cannot do this");return true}
 function admins(x){return S.users.filter(function(u){return u.on&&u.role==="admin"&&u.id!==x}).length}
-var DESIG0=["Managing Director","Chief Executive Officer","Director","General Manager","Manager","Senior Analyst","Analyst","Executive","Officer","Administrator"];
+var DESIG0=["Managing Director","Chief Executive Officer","Director","General Manager","Manager","Assistant Manager","Senior Analyst","Analyst","Senior Executive","Executive","Officer","Intern","Auditor","Administrator"];
 function desigs(){var l=S.policy&&S.policy.desigs;return l&&l.length?l:DESIG0}
-function suggestRole(t){t=(t||"").toLowerCase();return/managing director|chief|\bceo\b|chairman|^director|administrator/.test(t)?"admin":/manager|head|lead|supervisor/.test(t)?"manager":/analyst|executive|officer|associate|assistant|coordinator/.test(t)?"operator":/intern|trainee|viewer|auditor/.test(t)?"viewer":""}
+function suggestRole(t){t=(t||"").toLowerCase().replace(/\s+/g," ").trim();if(!t)return"";
+ var b=/\b(intern|trainee|viewer|auditor|observer)\b/.test(t)?"viewer":/\b(managing director|ceo|chairman|chairperson|founder|owner|president|administrator|sysadmin)\b|chief executive|system admin|it admin/.test(t)?"admin":/\b(director|chief|cfo|coo|cto|head|general manager|manager|lead|supervisor)\b/.test(t)?"manager":/\b(analyst|executive|officer|associate|assistant|coordinator|clerk|secretary|specialist)\b/.test(t)?"operator":"";
+ if(b&&/\b(assistant|asst|deputy|vice|junior|jr)\b/.test(t))b=b==="admin"?"manager":b==="manager"?"operator":b;
+ return b}
 var PL=[["view","View entries"],["edit","Add and edit entries"],["send","Send and export"],["del","Delete entries and clients"],["tpl","Manage templates"],["settings","Change settings"],["users","Manage users"]];
+function auditHtml(){
+ var act=S.users.filter(function(u){return u.on}),ad=act.filter(function(u){return u.role==="admin"}),it=[],RK={viewer:0,operator:1,manager:2,admin:3};
+ function add(ok,t,d,fx,fl){it.push({ok:ok,t:t,d:d,fx:fx,fl:fl})}
+ add(ad.length>=2,ad.length>=2?ad.length+" active Admins":"Only "+ad.length+" active Admin","Keep a second Admin so user management is never locked if one person is away.");
+ add(ad.length<=Math.max(3,Math.ceil(act.length*.15)),ad.length+" Admin"+(ad.length>1?"s":"")+" in total","Admin is a system privilege, not a seniority level. Keep it to 2\u20133 trusted people and give everyone else Manager or below.");
+ add(S.policy.role==="viewer","New users start as "+(ROLES[S.policy.role]||{}).n,"Least privilege: start new users as Viewer and raise access when their work needs it.",S.policy.role!=="viewer"?"def":"","Set Viewer");
+ add(!!(S.policy.domain||"").trim(),(S.policy.domain||"").trim()?"Email domain limited to @"+esc(S.policy.domain.replace(/^@/,"")):"No email-domain limit","Restrict accounts to your company domain in User policy so outside addresses cannot be added.");
+ var ia=S.users.filter(function(u){return!u.on&&u.role==="admin"});
+ add(!ia.length,ia.length?ia.length+" inactive user"+(ia.length>1?"s":"")+" still hold Admin":"No inactive Admins","Remove privileges when someone is deactivated.",ia.length?"inadm":"","Remove Admin");
+ var np=act.filter(function(u){return!u.ph});
+ add(!np.length,np.length?np.length+" active user"+(np.length>1?"s":"")+" without a password":"Every active user has a password","Set a password for them under Passwords so they can sign in.");
+ var nd=act.filter(function(u){return!(u.desig||"").trim()});
+ add(!nd.length,nd.length?nd.length+" active user"+(nd.length>1?"s":"")+" without a designation":"Every active user has a designation","A designation lets the role be checked against the job.");
+ var ov=act.filter(function(u){var r=roleFor(u.desig);return r&&RK[u.role]>RK[r]});
+ add(!ov.length,ov.length?ov.length+" member"+(ov.length>1?"s hold":" holds")+" more access than the designation suggests":"Access matches designations",ov.length?"Review: "+ov.slice(0,4).map(function(u){return esc(u.name)+" ("+ROLES[u.role].n+" vs "+ROLES[roleFor(u.desig)].n+")"}).join(", ")+(ov.length>4?"\u2026":"")+". Lower it unless the extra access is needed.":"Nobody is above the role their designation suggests.");
+ var ok=it.filter(function(x){return x.ok}).length,ca=can("users");
+ return'<div class="aud"><div class="audh"><b>Access health check</b><span class="bd '+(ok===it.length?"ok":"soon")+'">'+ok+" of "+it.length+' good</span></div><p class="hint" style="margin:2px 0 8px">Least privilege: only the access the work needs. Admin is granted by choice, never by job title.</p>'+it.map(function(x){return'<div class="audr"><span class="audi '+(x.ok?"g":"w")+'">'+(x.ok?icn("check"):"!")+'</span><div><b>'+x.t+'</b>'+(x.ok?"":'<div class="hint" style="margin:0">'+x.d+"</div>")+"</div>"+(!x.ok&&x.fx&&ca?'<button type="button" class="ib sx" style="width:auto;padding:0 10px" data-fix="'+x.fx+'">'+x.fl+"</button>":"")+"</div>"}).join("")+"</div>"}
 function renderUsersX(){
  dsSync();
  var su=$("sg_u");if(su&&document.activeElement!==su)su.innerHTML='<option value="">Pick a user (fills name and designation)</option>'+S.users.filter(function(u){return u.on}).map(function(u){return'<option value="'+u.id+'">'+esc(u.name)+(u.desig?" \u2013 "+esc(u.desig):"")+"</option>"}).join("");
@@ -1133,10 +1155,11 @@ function renderUsersX(){
  h+='<tr class="rlm"><td>Active users</td>'+ks.map(function(k){return'<td class="c">'+S.users.filter(function(u){return u.on&&u.role===k}).length+'</td>'}).join("")+'</tr>';
  PL.forEach(function(x){h+="<tr><td>"+x[1]+"</td>"+ks.map(function(k){return'<td class="c">'+((" "+ROLES[k].p+" ").indexOf(" "+x[0]+" ")>=0?'<span style="color:var(--ok,#107c10)">'+icn("check")+"</span>":"\u2013")+"</td>"}).join("")+"</tr>"});
  h+='<tr class="rlm"><td>What the role can do</td>'+ks.map(function(k){return'<td class="rld">'+esc(ROLES[k].d)+'</td>'}).join("")+'</tr>';
+ h+='<tr class="rlm"><td>Typical designations</td>'+ks.map(function(k){return'<td class="rld">'+esc(ROLES[k].t||"")+'</td>'}).join("")+"</tr>";
  h+='<tr class="rlm"><td>Admins</td><td colspan="'+nk+'">'+(S.users.filter(function(u){return u.on&&u.role==="admin"}).map(function(u){return'<span class="bd ok" style="margin:0 6px 4px 0;display:inline-block">'+esc(u.name)+(u.desig?" \u00b7 "+esc(u.desig):"")+"</span>"}).join("")||"None")+'</td></tr>';
  h+='<tr class="rlm"><td>Make a user Admin</td><td colspan="'+nk+'"><div class="bar" style="flex-wrap:nowrap"><select id="rlUser" style="flex:1;min-width:0"'+(ca?"":" disabled")+">"+S.users.filter(function(u){return u.on&&u.role!=="admin"}).map(function(u){return'<option value="'+u.id+'">'+esc(u.name)+" ("+ROLES[u.role].n+")</option>"}).join("")+'</select><button class="ib pri" id="rlMk" title="Make Admin" aria-label="Make Admin"'+(ca?"":" disabled")+">"+icn("shield")+"</button></div></td></tr>";
  h+="</tbody></table></div>";
- var keep=document.activeElement&&document.activeElement.id==="rlUser"?$("rlUser").value:"";rb.innerHTML=h;if(keep&&$("rlUser"))$("rlUser").value=keep}
+ var keep=document.activeElement&&document.activeElement.id==="rlUser"?$("rlUser").value:"";rb.innerHTML=(typeof auditHtml==="function"?auditHtml():"")+h;if(keep&&$("rlUser"))$("rlUser").value=keep}
 function roleOpts(sel){return Object.keys(ROLES).map(function(k){return'<option value="'+k+'"'+(k===sel?" selected":"")+">"+ROLES[k].n+"</option>"}).join("")}
 function renderUsers(){
   ensureUsers();var ca=can("users"),m=me();
@@ -1155,17 +1178,18 @@ $("uAdd").onclick=function(){
   var n=$("uN").value.trim(),e=$("uE").value.trim().toLowerCase(),r=$("uR").value,dm=(S.policy.domain||"").trim().toLowerCase().replace(/^@/,""),m=$("uMsg");
   var er=!n?"Enter the full name":!EM.test(e)?"Enter a valid email address":S.users.some(function(u){return u.email.toLowerCase()===e})?"This email already has an account":(dm&&e.split("@")[1]!==dm)?"Policy allows only @"+dm+" emails":"";
   if(er){m.textContent=er;return}
+  if(r==="admin"&&!confirm(ADMIN_Q(n)))return;
   var u={id:"u"+Date.now().toString(36),name:n,email:e,role:r,desig:$("uD").value.trim(),on:$("uS").value==="1",added:todayKey(),by:me().name};
   S.users.push(u);logIt("User","Added",n+" \u2013 "+ROLES[r].n,"");save();$("uN").value="";$("uE").value="";$("uD").value="";$("uR").value=S.policy.role;m.textContent="";renderUsers();toast("User added");
   if(S.policy.invite&&u.on)inviteUser(u)
 };
-$("uList").onchange=function(ev){var t=ev.target,u=S.users.filter(function(x){return x.id===t.dataset.u})[0];if(!u||t.dataset.a!=="role"||deny("users"))return;if(u.role==="admin"&&t.value!=="admin"&&!admins(u.id)){toast("Keep at least one active Admin");renderUsers();return}u.role=t.value;logIt("User","Role changed",u.name+" \u2013 "+ROLES[u.role].n,"");save();renderAll()};
+$("uList").onchange=function(ev){var t=ev.target,u=S.users.filter(function(x){return x.id===t.dataset.u})[0];if(!u||t.dataset.a!=="role"||deny("users"))return;if(u.role==="admin"&&t.value!=="admin"&&!admins(u.id)){toast("Keep at least one active Admin");renderUsers();return}if(t.value==="admin"&&u.role!=="admin"&&!confirm(ADMIN_Q(u.name))){renderUsers();return}u.role=t.value;logIt("User","Role changed",u.name+" \u2013 "+ROLES[u.role].n,"");save();renderAll()};
 $("uList").onclick=function(ev){var t=ev.target.closest("button[data-a]");if(!t||deny("users"))return;var u=S.users.filter(function(x){return x.id===t.dataset.u})[0];if(!u)return;
-  if(t.dataset.a==="adm"){if(u.role==="admin"){if(!admins(u.id)){toast("Keep at least one active Admin");return}u.role=S.policy.role==="admin"?"manager":S.policy.role}else u.role="admin";logIt("User",u.role==="admin"?"Made Admin":"Admin removed",u.name,"");save();renderAll();toast(u.name+" is now "+ROLES[u.role].n);return}
+  if(t.dataset.a==="adm"){if(u.role==="admin"){if(!admins(u.id)){toast("Keep at least one active Admin");return}u.role=demoteTo(u)}else{if(!confirm(ADMIN_Q(u.name)))return;u.role="admin"}logIt("User",u.role==="admin"?"Made Admin":"Admin removed",u.name,"");save();renderAll();toast(u.name+" is now "+ROLES[u.role].n);return}
   if(t.dataset.a==="tog"){if(u.on&&u.role==="admin"&&!admins(u.id)){toast("Keep at least one active Admin");return}u.on=!u.on;logIt("User",u.on?"Activated":"Deactivated",u.name,"");save();renderAll()}
   else if(t.dataset.a==="rm")arm(t,"Click again to remove "+u.name,function(){S.users=S.users.filter(function(x){return x.id!==u.id});logIt("User","Removed",u.name,"");save();renderAll()})};
 $("uMe").onchange=function(){S.me=this.value;save();renderAll();toast("Now working as "+me().name)};
-$("pDef").onchange=function(){if(deny("users"))return;S.policy.role=this.value;save();renderUsers()};
+$("pDef").onchange=function(){if(deny("users"))return;if(this.value==="admin"){toast("Admin cannot be the default role. Grant it to named people only.");renderUsers();return}S.policy.role=this.value;save();renderUsers()};
 $("pDom").onchange=function(){if(deny("users"))return;S.policy.domain=this.value.trim();save()};
 function roleKey(t){t=key(String(t||""));if(!t)return"";var k=Object.keys(ROLES).filter(function(x){return x===t||key(ROLES[x].n)===t})[0];return k||""}
 function roleFor(d){var k=key(d||"");if(!k)return"";var m=S.policy.dmap||{};return(m[k]&&ROLES[m[k]])?m[k]:suggestRole(d)}
@@ -1194,20 +1218,21 @@ $("pDmAdd").onclick=function(){if(deny("users"))return;var L=desigs().slice(),m=
 $("pDmApply").onclick=function(){
  if(deny("users"))return;var m=$("pDmMsg"),ks={},ch=[],me0=me().id;desigs().forEach(function(d){ks[key(d)]=1});
  S.users.forEach(function(u){var k=key(u.desig||"");if(!k||!ks[k])return;var r=roleFor(u.desig)||S.policy.role;if(r!==u.role)ch.push({u:u,from:u.role,to:r})});
- var own=ch.filter(function(c){return c.u.id===me0}).length;ch=ch.filter(function(c){return c.u.id!==me0});
- if(!ch.length){m.textContent=own?"Everyone else already matches. Your own role was left unchanged.":"Every member already has the role set for their designation.";return}
+ var own=ch.filter(function(c){return c.u.id===me0}).length;ch=ch.filter(function(c){return c.u.id!==me0});var skipAdm=ch.filter(function(c){return c.to==="admin"&&c.from!=="admin"}).length;ch=ch.filter(function(c){return!(c.to==="admin"&&c.from!=="admin")});
+ if(!ch.length){m.textContent=skipAdm?skipAdm+" member"+(skipAdm>1?"s are":" is")+" suggested for Admin. Admin is granted explicitly from the Users list.":own?"Everyone else already matches. Your own role was left unchanged.":"Every member already has the role set for their designation.";return}
  var adm=S.users.filter(function(u){if(!u.on)return false;var c=ch.filter(function(x){return x.u===u})[0];return(c?c.to:u.role)==="admin"}).length;
  if(!adm){m.textContent="This would leave no active Admin. Map at least one designation to Admin first.";return}
  var sample=ch.slice(0,8).map(function(c){return"\u2022 "+c.u.name+": "+ROLES[c.from].n+" \u2192 "+ROLES[c.to].n}).join("\n")+(ch.length>8?"\n\u2026 and "+(ch.length-8)+" more":"");
  if(!confirm("Change the role of "+ch.length+" member"+(ch.length>1?"s":"")+" to match their designation?\n\n"+sample+(own?"\n\n(Your own role is not changed.)":"")))return;
  ch.forEach(function(c){c.u.role=c.to;logIt("User","Role by designation",c.u.name+" \u2013 "+ROLES[c.from].n+" \u2192 "+ROLES[c.to].n,"")});
- save();renderAll();m.textContent="\u2713 "+ch.length+" member"+(ch.length>1?"s":"")+" updated."};
+ save();renderAll();m.textContent="\u2713 "+ch.length+" member"+(ch.length>1?"s":"")+" updated."+(skipAdm?" "+skipAdm+" suggested Admin promotion"+(skipAdm>1?"s":"")+" skipped; grant Admin explicitly.":"")};
 function dHint(live){
  var v=$("uD").value.trim(),h=$("uRH"),use=$("uRUse");if(!can("users")||!v)return;
  var listed=desigs().some(function(x){return key(x)===key(v)});if(live&&!listed)return;
  var r=roleFor(v);use.hidden=true;
  if(S.uEdit){if(r&&r!==$("uR").value){h.textContent="Designation \u201C"+v+"\u201D is mapped to "+ROLES[r].n+".";use.textContent="Set role to "+ROLES[r].n;use.dataset.r=r;use.hidden=false}return}
- if(r){$("uR").value=r;h.textContent="Role set from designation: "+ROLES[r].n+". "+ROLES[r].d}
+ if(r==="admin"){$("uR").value="manager";h.textContent="This designation suggests Admin, but Admin is never filled in automatically. Role set to Manager.";use.textContent="Grant Admin (explicit)";use.dataset.r="admin";use.hidden=false}
+ else if(r){$("uR").value=r;h.textContent="Role set from designation: "+ROLES[r].n+". "+ROLES[r].d}
  else{$("uR").value=S.policy.role;h.textContent="No role is mapped to this designation, so the default ("+ROLES[S.policy.role].n+") is used. Map it in Settings \u203A Users & access."}}
 $("uD").onchange=function(){dHint(false)};$("uD").oninput=function(){dHint(true)};
 $("uRUse").onclick=function(){var r=this.dataset.r;if(r){$("uR").value=r;$("uRH").textContent=ROLES[r].d;this.hidden=true}};
@@ -1215,7 +1240,7 @@ $("pDes").oninput=function(){if(deny("users"))return;var L=[],m=Object.assign({}
  this.value.split(/\r?\n/).forEach(function(x){var p=x.split(/\s*[|\t=]\s*/),d=(p[0]||"").trim().replace(/\s+/g," ");if(!d||L.some(function(y){return key(y)===key(d)}))return;L.push(d);var r=roleKey(p[1]);if(r)m[key(d)]=r});
  setDes(L,m);var dl=$("desigList");if(dl)dl.innerHTML=desigs().map(function(x){var r=roleFor(x)||S.policy.role;return'<option value="'+esc(x)+'" label="Role: '+esc(ROLES[r].n)+'">'}).join("");renderDmap()};
 $("pDesReset").onclick=function(){if(deny("users"))return;S.policy.desigs=[];S.policy.dmap={};save();$("pDmMsg").textContent="";renderUsersX()};
-function desigHint(u){var r=roleFor(u.desig);return r&&r!==u.role?'<div class="hint" style="margin:2px 0 0;color:var(--amber)">By designation: '+ROLES[r].n+'</div>':""}
+function desigHint(u){var r=roleFor(u.desig);return r&&r!==u.role?'<div class="hint" style="margin:2px 0 0;color:var(--amber)">Suggested by designation: '+ROLES[r].n+'</div>':""}
 $("d_roles").addEventListener("click",function(e){var b=e.target.closest("#rlMk");if(!b||deny("users"))return;var u=S.users.filter(function(x){return x.id===$("rlUser").value})[0];if(!u)return;u.role="admin";logIt("User","Made Admin",u.name,"");save();renderAll();toast(u.name+" is now Admin")});
 $("pInv").onchange=function(){if(deny("users"))return;S.policy.invite=this.checked;save()};
 function applyRules(){
@@ -1456,7 +1481,7 @@ $("imp").onchange=function(){
 };
 $("wipe").onclick=function(){
   if(!confirm("Reset ALL data in this browser? This cannot be undone. Export a backup first."))return;
-  S.entries=[];S.refSerial=1;S.tplLib=[];S.tplActive={};S.autoTpl=true;S.applyNow=true;S.tpl=JSON.parse(JSON.stringify(DEF));S.sender=SIG;S.clients={};S.users=[];S.me="";S.policy={role:"operator",domain:"",invite:true};S.log=[];S.drafts={};S.grp="";S.mailapp="outlook";
+  S.entries=[];S.refSerial=1;S.tplLib=[];S.tplActive={};S.autoTpl=true;S.applyNow=true;S.tpl=JSON.parse(JSON.stringify(DEF));S.sender=SIG;S.clients={};S.users=[];S.me="";S.policy={role:"viewer",domain:"",invite:true};S.log=[];S.drafts={};S.grp="";S.mailapp="outlook";
   S.banks=BANKS.slice();S.docs=DOCS.slice();S.layout={order:[],size:{}};S.ui={theme:"auto",accent:"blue",density:"comfortable",size:"medium"};save();refreshAll();dmsg("All data cleared")
 };
 var bi=-1,bl=[];
@@ -1634,6 +1659,7 @@ $("uAdd").onclick=function(){if(!S.uEdit){_ub.call(this);return}
  if(deny("users"))return;var u=S.users.filter(function(x){return x.id===S.uEdit})[0],m=$("uMsg"),n=$("uN").value.trim(),e=$("uE").value.trim().toLowerCase(),r=$("uR").value,on=$("uS").value==="1",pw=$("uP").value,dm=(S.policy.domain||"").trim().toLowerCase().replace(/^@/,"");
  var er=!u?"User not found":!n?"Enter the full name":!EM.test(e)?"Enter a valid email address":S.users.some(function(x){return x.id!==u.id&&x.email.toLowerCase()===e})?"This email already has an account":(dm&&e.split("@")[1]!==dm)?"Policy allows only @"+dm+" emails":(pw&&pw.length<6)?"Password: at least 6 characters":(u.id===me().id&&!on)?"You cannot deactivate yourself":(u.role==="admin"&&(r!=="admin"||!on)&&!admins(u.id))?"Keep at least one active Admin":"";
  if(er){m.textContent=er;return}
+ if(r==="admin"&&u.role!=="admin"&&!confirm(ADMIN_Q(n)))return;
  u.name=n;u.email=e;u.role=r;u.desig=$("uD").value.trim();u.on=on;(pw?setPw(u,pw):Promise.resolve()).then(function(){logIt("User","Updated",n+" \u2013 "+ROLES[r].n,"");save();endEdit();renderAll()})};
 var _uo=$("uAdd").onclick;$("uAdd").onclick=function(){var n0=S.users.length;_uo.call(this);if(S.users.length>n0)$("d_uadd").close()};
 
@@ -2446,6 +2472,7 @@ $("uList").addEventListener("change",function(e){var c=e.target.closest("[data-u
 bk.onclick=function(e){var b=e.target.closest("[data-bk]");if(!b)return;var a=b.dataset.bk;if(a==="clr"){UQ.sel={};paint();return}if(deny("users"))return;
  var us=S.users.filter(function(u){return UQ.sel[u.id]}),m=me().id,done=0,skip=0,nr=$("uBr").value;
  if(a==="rm"&&!confirm("Remove "+us.filter(function(u){return!u.on&&u.id!==m}).length+" inactive user(s) permanently?"))return;
+ if(a==="role"&&nr==="admin"&&!confirm("Give Admin access to "+us.length+" selected user(s)?\n\nAdmins can manage users, roles, templates and settings."))return;
  us.forEach(function(u){if(a==="role"){if(u.role==="admin"&&nr!=="admin"&&!admins(u.id)){skip++;return}u.role=nr}
   else if(a==="on")u.on=true;
   else if(a==="off"){if(u.id===m||(u.role==="admin"&&!admins(u.id))){skip++;return}u.on=false}
@@ -2598,11 +2625,11 @@ function chOK(ch,n){var c=contact(n);if(ch==="letter")return true;if(c.ltype==="
 function chWhy(ch,n){return contact(n).ltype==="proposal"?"Proposal \u2013 letter only":ch==="email"?"No email saved (add it in Clients)":"No WhatsApp number saved (add it in Clients)"}
 var CHL={email:"Email",wa:"WhatsApp",letter:"Letter"};
 function gact(g){var ns=[];g.items.forEach(function(r){if(ns.indexOf(r.e.cn)<0)ns.push(r.e.cn)});GM[g.k]={name:g.name,items:g.items,ns:ns};
- return'<span class="gact">'+["email","wa","letter"].map(function(k){var n=ns.filter(function(m){return chOK(k,m)}).length;return'<button type="button" class="sb" data-gsend="'+k+'" data-gk="'+esc(g.k)+'"'+(n?"":" disabled")+' title="Process '+CHL[k]+' for every client in this group">'+CHL[k]+(k==="letter"?"s":"")+' <b>'+n+'</b></button>'}).join("")+'<button type="button" class="sb" data-gnotify="'+esc(g.k)+'" title="Share a notification with the clients, branches or banks in this group">Notify</button></span>'}
+ return'<span class="gact">'+["email","wa","letter"].map(function(k){var n=ns.filter(function(m){return chOK(k,m)}).length;return'<button type="button" class="sb'+(n?"":" need")+'" data-gsend="'+k+'" data-gk="'+esc(g.k)+'" title="'+(n?"Process "+CHL[k]+" for every client in this group":"No client here has "+(k==="email"?"an email":"a WhatsApp number")+" saved \u2013 open the list to add one")+'">'+CHL[k]+(k==="letter"?"s":"")+' <b>'+n+'</b></button>'}).join("")+'<button type="button" class="sb" data-gnotify="'+esc(g.k)+'" title="Share a notification with the clients, branches or banks in this group">Notify</button></span>'}
 function rowH(r){
  var e=r.e,P=isP(e),s=r.s,sm=SM[key(e.cn)]||{},rk=s&&s.k!=="wait"?s.k:"";
  var sel='<select data-js="'+r.i+'" aria-label="Job status">'+JS.map(function(j){return"<option"+(j===r.j?" selected":"")+">"+j+"</option>"}).join("")+"</select>";
- var bt=function(k){var ok=chOK(k,e.cn);return'<button type="button" class="sb'+(rk===k?" rec":"")+'" data-send="'+k+'" data-i="'+r.i+'"'+(ok?"":" disabled")+' title="'+(ok?CHL[k]+" this client"+(rk===k?" (suggested)":""):chWhy(k,e.cn))+'">'+CHL[k]+"</button>"};
+ var bt=function(k){var ok=chOK(k,e.cn),dn=!!sm[CHL[k]],ttl=dn?CHL[k]+" already sent today \u2013 click to send again":ok?CHL[k]+" this client"+(rk===k?" (suggested)":""):(P?chWhy(k,e.cn):"No "+(k==="email"?"email":"WhatsApp number")+" saved \u2013 click to add it and send");return'<button type="button" class="sb'+(rk===k?" rec":"")+(dn?" done":"")+(ok?"":" need")+'" data-send="'+k+'" data-i="'+r.i+'" aria-label="'+CHL[k]+" "+esc(e.cn)+(dn?", sent today":"")+'" title="'+ttl+'">'+(dn?"\u2713 ":"")+CHL[k]+"</button>"};
  var nx='<div class="sendr">'+bt("email")+bt("wa")+bt("letter")+'<button type="button" class="sb ed" data-act="'+r.i+'" data-k="'+(rk||"email")+'" title="Edit and compose" aria-label="Edit and compose">\u270E</button><button type="button" class="sb" data-nrow="'+r.i+'" title="Share a notification with the client, its branch or its bank">Notify</button></div>'+(s?'<div class="sgw"><span class="sgb sg-'+s.k+'">'+esc(s.t)+'</span><span class="hint" title="'+esc(s.why)+'">'+esc(s.why)+"</span></div>":"");
  var tk=(sm.Email?'<span class="cbs">\u2713 Email</span>':"")+(sm.WhatsApp?'<span class="cbs">\u2713 WhatsApp</span>':"")+(sm.Letter?'<span class="cbs">\u2713 Letter</span>':"");
  return'<tr'+(Sel.has(e)?' class="sel"':"")+'><td class="tc"><input type="checkbox" data-sel="'+r.i+'"'+(Sel.has(e)?" checked":"")+' aria-label="Select client"></td><td class="tn">'+avatar(e.cn)+'<span class="nm">'+esc(e.cn)+tk+'</span></td><td data-l="Bank">'+(P?"Proposal":esc(e.bn||""))+'</td><td data-l="Branch">'+(P?esc(e.cc||""):esc(e.br||""))+'</td><td data-l="Rating">'+esc(e.rt||"")+'</td><td data-l="Valid till">'+esc(shortDate(e.vt))+(e.vt?' <span class="bd '+r.st.k+'">'+esc(r.st.t)+"</span>":"")+'</td><td data-l="Job status">'+sel+'</td><td class="nxt tx">'+nx+"</td></tr>"}
@@ -2644,6 +2671,15 @@ function selBar(){var n=Sel.size;$("bdSel").innerHTML=n?'<div class="bsg"><b>'+n
 function exportSel(){var rows=[["Client","Bank","Branch","Rating type","Valid till","Status","Job status","Suggested next step","Email","WhatsApp"]];
  S.entries.forEach(function(e){if(!Sel.has(e))return;var c=contact(e.cn),j=jobOf(e);rows.push([e.cn,e.bn||"",e.br||"",e.rt||"",e.vt||"",statusOf(e.vt).t,j,j==="On Track"?sug(e).t:"",c.email||"",c.wa||""])});
  dl("selected-clients.csv",toCsv(rows))}
+function ensure(k,n){
+ if(chOK(k,n))return true;
+ if(contact(n).ltype==="proposal"){toast("Proposal clients are letter-only");return false}
+ var lab=k==="email"?"email address":"WhatsApp number (with country code)",v=prompt("No "+lab+" saved for "+n+".\nEnter it to continue:","");
+ if(v===null)return false;v=v.trim();
+ if(k==="email"){var ms=mails(v).filter(function(m){return EM.test(m)});if(!ms.length){toast("That is not a valid email address");return false}setContact(n,"email",ms.join(", "))}
+ else{if(!window.LDc||!LDc.waNum(v)){toast("That is not a valid WhatsApp number");return false}setContact(n,"wa",v)}
+ logIt("Client","Contact added",CHL[k]+" saved from Client board",n);render();return chOK(k,n)}
+window.LDensure=ensure;
 function openCompose(i,k){var e=S.entries[i];if(!e)return;S.grp=e.cn;$("cn").value=e.cn;S.tab=k==="wa"?"wa":k==="letter"?"letter":"email";renderAll();showView("compose");document.body.classList.add("reading")}
 function exportCsv(){
  var l=filtered().filter(function(r){return(B.js==="all"||r.j===B.js)&&(!B.sg||(r.s&&r.s.k===B.sg))});
@@ -2815,7 +2851,7 @@ V.innerHTML='<div class="card"><div class="srow"><h2>Client board</h2><span clas
 +'<div class="bbar"><label>Group by <select id="bdBy"><option value="bank">Bank name</option><option value="branch">Branch name</option><option value="vt">Valid till</option><option value="js">Job status</option><option value="none">No grouping</option></select></label>'
 +'<label>Sort by <select id="bdSort"><option value="vt">Valid till</option><option value="cn">Client name</option><option value="bn">Bank</option><option value="br">Branch</option><option value="js">Job status</option></select></label>'
 +'<label>Bank <select id="bdBank"></select></label><label>Branch <select id="bdBr"></select></label>'
-+'<input type="search" id="bdQ" placeholder="Filter this board" aria-label="Filter this board"></div>'
++'<label>Search <input type="search" id="bdQ" placeholder="Filter this board" aria-label="Filter this board" autocomplete="off"></label></div>'
 +'<div class="bbar" id="bdChips"></div><div id="bdSel"></div><div id="bdSug"></div><div id="bdList"></div></div>';
 var anchor=$("v-clients");anchor.parentNode.insertBefore(V,anchor.nextSibling);
 $("bdBy").value=B.by;$("bdSort").value=B.sort;
@@ -2867,7 +2903,7 @@ $("bdList").onclick=function(e){
  var gn=e.target.closest("[data-gnotify]");if(gn){e.preventDefault();var o2=GM[gn.dataset.gnotify];if(o2&&window.LDnotify)LDnotify(o2.items.map(function(r){return r.e}),o2.name);return}
  var nr=e.target.closest("[data-nrow]");if(nr){var en2=S.entries[+nr.dataset.nrow];if(en2&&window.LDnotify)LDnotify([en2],en2.cn);return}
  var g=e.target.closest("[data-gsend]");if(g){e.preventDefault();var o=GM[g.dataset.gk];if(o&&window.LDrun)LDrun(g.dataset.gsend,o.ns.slice(),o.name,1,new Set(o.items.map(function(r){return r.e})));return}
- var sd=e.target.closest("[data-send]");if(sd){var en=S.entries[+sd.dataset.i];if(en&&window.LDrun)LDrun(sd.dataset.send,[en.cn],en.cn,0);return}
+ var sd=e.target.closest("[data-send]");if(sd){var en=S.entries[+sd.dataset.i];if(en&&window.LDrun&&!deny("send")&&ensure(sd.dataset.send,en.cn)){LDrun(sd.dataset.send,[en.cn],en.cn,0);setTimeout(render,350)}return}
  var b=e.target.closest("[data-act]");if(b)openCompose(+b.dataset.act,b.dataset.k)};
 $("bdComb").onchange=function(){if(window.LDcb)LDcb.set(this.checked)};
 $("bdExp").onclick=exportCsv;$("bdUndo").onclick=undo;
@@ -2915,6 +2951,7 @@ badge();
 #clist .cbc{width:16px;height:16px}
 #clist .cbg.shut .wrap{display:none}
 #clist .cbs{color:var(--green);font-size:11px;margin-left:6px}
+#d_bulk .cbr{display:flex;gap:4px;flex-wrap:wrap}#d_bulk .cbb.need{border-style:dashed;color:var(--mute)}
 #d_bulk .st{font-size:12px}#d_bulk .st.ok{color:var(--green)}#d_bulk .st.no{color:var(--mute)}
 #bulkPrint{display:none}
 body.bulkprint>*:not(#bulkPrint){display:none!important}
@@ -2926,7 +2963,7 @@ body.bulkprint #bulkPrint{display:block;background:#fff;color:#000}
 </style>
 <script>
 (function(){
-var CB={mode:"bb",q:"",sel:{},shut:{},comb:false,bcc:true},L=window.LDc,CHN={email:"Email",wa:"WhatsApp",letter:"Letter"},Q=null;try{CB.comb=localStorage.getItem("ld_comb")==="1"}catch(e){}
+var CB={mode:"bb",q:"",bank:"",br:"",sel:{},shut:{},comb:false,bcc:true},L=window.LDc,CHN={email:"Email",wa:"WhatsApp",letter:"Letter"},Q=null;try{CB.comb=localStorage.getItem("ld_comb")==="1"}catch(e){}
 function isP(n){return contact(n).ltype==="proposal"}
 function emOf(n){return mails(contact(n).email).filter(function(m){return EM.test(m)}).join(", ")}
 function waOf(n){return L.waNum(contact(n).wa)}
@@ -2938,7 +2975,7 @@ function buckets(){
   groups().forEach(function(g){
     var seen={};
     g.items.forEach(function(e){
-      var p=isP(g.name),lab=labOf(p,e);
+      var p=isP(g.name);if(CB.bank&&(p||key(e.bn||"")!==key(CB.bank)))return;if(CB.br&&(p||key(e.br||"")!==key(CB.br)))return;var lab=labOf(p,e);
       var k=key(lab);
       if(CB.q&&(g.name+" "+lab).toLowerCase().indexOf(CB.q)<0)return;
       if(!m[k]){m[k]={k:k,lab:lab,p:p,cl:[]};o.push(m[k])}
@@ -2953,8 +2990,38 @@ function buckets(){
 function sentMap(){var t=todayKey(),m={};S.log.forEach(function(l){if(dayKey(l.t)!==t||!l.c)return;var k=key(l.c);m[k]=m[k]||{};if(l.a==="Opened for sending")m[k][l.ch]=1;else if(l.ch==="Letter"&&/Printed|Downloaded/.test(l.a))m[k].Letter=1})
   return m}
 function cnt(b,ch){return b.cl.filter(function(x){return can1(ch,x.g.name)}).length}
+function bbLists(){
+  var bm={},rm={};
+  S.entries.forEach(function(e){if(isP(e.cn)||!e.bn)return;var k=key(e.bn);bm[k]=bm[k]||{n:e.bn,s:{}};bm[k].s[key(e.cn)]=1;
+    if(!CB.bank||key(CB.bank)===k){if(e.br){var r=key(e.br);rm[r]=rm[r]||{n:e.br,s:{}};rm[r].s[key(e.cn)]=1}}});
+  var f=function(m){return Object.keys(m).map(function(k){return{n:m[k].n,c:Object.keys(m[k].s).length}}).sort(function(a,b){return a.n.localeCompare(b.n)})},bl=f(bm),rl=f(rm);
+  if(CB.bank&&!bl.some(function(x){return key(x.n)===key(CB.bank)}))CB.bank="";
+  if(CB.br&&!rl.some(function(x){return key(x.n)===key(CB.br)}))CB.br="";
+  return{b:bl,r:rl}
+}
+function groupLabel(){return CB.bank?CB.bank+(CB.br?" \u2013 "+CB.br:""):(CB.q?"Search results":"All clients")}
+function groupSet(bs){var nm=[],st=new Set(),bk={};bs.forEach(function(b){b.cl.forEach(function(x){nm.push(x.g.name);x.it.forEach(function(e){st.add(e);if(e.bn)bk[key(e.bn)]=1})})});return{nm:names(nm),st:st,nb:Object.keys(bk).length}}
+function toolbar(bs,ll){
+  var opt=function(l,cur,all){return'<option value="">'+all+" ("+l.length+")</option>"+l.map(function(x){return'<option value="'+esc(x.n)+'"'+(key(x.n)===key(cur)?" selected":"")+">"+esc(x.n)+" ("+x.c+")</option>"}).join("")},
+    g=groupSet(bs),gc=function(ch){return g.nm.filter(function(n){return can1(ch,n)}).length},
+    gt={email:"One email to everyone in this group (recipients hidden in Bcc)",wa:"One WhatsApp message per client (WhatsApp cannot send one message to many)",letter:"One combined letter per bank & branch, ready to print or save as PDF"};
+  return'<div class="cbt"><div class="cbr1">'
+   +'<label class="cbf">Search<input type="search" id="cbQ" placeholder="Search client, bank or branch" autocomplete="off" value="'+esc(CB.q)+'"></label>'
+   +'<label class="cbf">Bank<select id="cbBk">'+opt(ll.b,CB.bank,"All banks")+'</select></label>'
+   +'<label class="cbf">Branch<select id="cbBr">'+opt(ll.r,CB.br,CB.bank?"All branches of this bank":"All branches")+'</select></label>'
+   +'<label class="cbck" title="Make one email or letter for each bank and branch instead of one per client"><input type="checkbox" id="cbC"> One email / letter per bank &amp; branch</label></div>'
+   +'<div class="cbr2"><div class="cbgs"><span class="cbgt">Group send \u2013 <b>'+esc(groupLabel())+'</b><span class="hint"> '+g.nm.length+" client"+(g.nm.length===1?"":"s")+"</span></span>"
+   +["email","wa","letter"].map(function(ch){return'<button type="button" class="cbb pri" data-gs="'+ch+'" title="'+gt[ch]+'">Group '+CHN[ch].toLowerCase()+" ("+(ch==="letter"?g.nm.length:gc(ch))+")</button>"}).join("")+'</div>'
+   +'<span class="cbsel"><span id="cbN" class="hint"></span><button class="cbb pri" data-b="email">Email</button><button class="cbb pri" data-b="wa">WhatsApp</button><button class="cbb pri" data-b="letter">Letter</button><button class="cbb" data-b="clr">Clear</button></span></div></div>'}
+function groupSend(ch){
+  if(deny("send"))return;
+  var g=groupSet(buckets());
+  if(!g.nm.length){toast("No clients in this group");return}
+  if(!CB.bank&&g.nm.length>1&&!confirm("Group "+CHN[ch].toLowerCase()+" for all "+g.nm.length+" clients shown ("+g.nb+" bank"+(g.nb===1?"":"s")+")?\n\nTip: pick a Bank and Branch first to send to one group."))return;
+  var was=CB.comb;CB.comb=true;try{run(ch,g.nm,groupLabel(),1,g.st)}finally{CB.comb=was}
+}
 window.renderClients=function(){
-  var bs=buckets(),sm=sentMap(),h='<div class="cbt"><input type="search" id="cbQ" placeholder="Search client, bank or branch" value="'+esc(CB.q)+'"><label style="display:flex;gap:6px;align-items:center">Group by <select id="cbM"><option value="bb">Bank &amp; branch</option><option value="bank">Bank</option><option value="flat">No grouping</option></select></label><label style="display:flex;gap:6px;align-items:center" title="Make one email or letter for each bank and branch instead of one per client"><input type="checkbox" id="cbC"> One email / letter per bank &amp; branch</label><span class="sp"></span><span class="cbsel"><span id="cbN" class="hint"></span><button class="cbb pri" data-b="email">Email</button><button class="cbb pri" data-b="wa">WhatsApp</button><button class="cbb pri" data-b="letter">Letter</button><button class="cbb" data-b="clr">Clear</button></span></div>';
+  var ll=bbLists(),bs=buckets(),sm=sentMap(),h=toolbar(bs,ll);
   if(!groups().length){$("clist").innerHTML='<div class="empty">Clients appear here once you add an entry.</div>';return}
   if(!bs.length)h+='<div class="empty">No clients match.</div>';
   bs.forEach(function(b,bi){
@@ -2970,7 +3037,7 @@ window.renderClients=function(){
     });
     h+='</tbody></table></div></div>'
   });
-  $("clist").innerHTML=h;$("cbM").value=CB.mode;$("cbC").checked=CB.comb;syncSel()
+  $("clist").innerHTML=h;$("cbC").checked=CB.comb;syncSel()
 };
 function syncSel(){
   var root=$("clist"),n=Object.keys(CB.sel).length;
@@ -2985,7 +3052,8 @@ $("clist").oninput=function(ev){var t=ev.target;if(t.id==="cbQ"){CB.q=t.value.tr
   if(!t.dataset.f)return;setContact(t.dataset.n,t.dataset.f,t.value.trim());
   document.querySelectorAll("#clist tr[data-n]").forEach(function(r){if(r.dataset.n!==t.dataset.n)return;r.querySelectorAll("[data-r]").forEach(function(b){var ok=can1(b.dataset.r,t.dataset.n);b.disabled=!ok;b.title=ok?CHN[b.dataset.r]+" this client":why(b.dataset.r,t.dataset.n)})})};
 $("clist").onchange=function(ev){var t=ev.target;
-  if(t.id==="cbM"){CB.mode=t.value;renderClients();return}
+  if(t.id==="cbBk"){CB.bank=t.value;CB.br="";renderClients();return}
+  if(t.id==="cbBr"){CB.br=t.value;renderClients();return}
   if(t.id==="cbC"){setComb(t.checked);return}
   if(t.dataset.f==="email"){t.value=mails(t.value).join(", ");setContact(t.dataset.n,"email",t.value);return}
   if(t.dataset.c1!==undefined){if(t.checked)CB.sel[key(t.dataset.c1)]=t.dataset.c1;else delete CB.sel[key(t.dataset.c1)];syncSel()}
@@ -2993,6 +3061,7 @@ $("clist").onchange=function(ev){var t=ev.target;
 $("clist").onclick=function(ev){
   var b=ev.target.closest("button");if(!b||b.disabled)return;var d=b.dataset;
   if(d.t!==undefined){var k=buckets()[+d.t].k;CB.shut[k]=!CB.shut[k];renderClients()}
+  else if(d.gs){groupSend(d.gs)}
   else if(d.b==="clr"){CB.sel={};syncSel()}
   else if(d.b){run(d.b,Object.keys(CB.sel).map(function(k){return CB.sel[k]}),"Selected clients",1)}
   else if(d.gb!==undefined){var bk=buckets()[+d.gb];var st=new Set();bk.cl.forEach(function(x){x.it.forEach(function(e){st.add(e)})});run(d.ch,groupNames(+d.gb),bk.lab,1,st)}
@@ -3050,6 +3119,10 @@ var P=document.createElement("div");P.id="bulkPrint";document.body.appendChild(P
 D.addEventListener("close",function(){renderClients()});
 D.onclick=function(ev){var b=ev.target.closest("button");if(!b)return;
   if(b.id==="bkX"||b.id==="bkX2"){D.close();return}
+  if(b.dataset.ich){var ic=b.dataset.ich,x0=Q.items[+b.dataset.i];if(!x0||deny("send")||!window.LDensure||!LDensure(ic,x0.names[0]))return;
+    var t0={label:x0.label,names:x0.names.slice(),ok:true,use:true,done:0};
+    if(ic==="letter"){var q0=Q;Q=Object.assign({},q0,{ch:"letter",items:[t0]});doLetters(false);Q=q0;setTimeout(dlg,600);return}
+    var m0=mk(t0,ic);if(m0){openOne(m0,ic);toast(CHN[ic]+" opened for "+t0.names[0])}dlg();return}
   var i=b.dataset.i;if(i!==undefined){openItem(+i);return}
   if(b.id==="bkNext"){var k=Q.items.filter(function(x){return x.use&&x.ok&&!x.done})[0];if(k)openItem(Q.items.indexOf(k));return}
   if(b.id==="bkAll"){Q.items.forEach(function(x,i){if(x.use&&x.ok&&!x.done)openItem(i,1)});dlg();return}
@@ -3066,7 +3139,7 @@ function dlg(){
   h+='<p class="hint">'+(pl?"All ticked letters are put together, one per page, so you can print or save them as one PDF.":"Each message opens in "+(ch==="wa"?"WhatsApp":(L.PN[S.mailapp]||"your mail app"))+" ready to send. Use Open next to work through the list, or Open all (allow pop-ups if your browser blocks it).")+'</p>';
   h+='<div class="wrap"><table><thead><tr><th></th><th>'+(Q.comb&&ch!=="wa"?"Bank &amp; branch":"Client")+'</th><th>'+(ch==="email"?"To":ch==="wa"?"Number":"Type")+'</th><th>Status</th><th></th></tr></thead><tbody>';
   Q.items.forEach(function(x,i){var c=x.items,n=x.names[0];
-    h+='<tr><td><input type="checkbox" data-u="'+i+'"'+(x.use&&x.ok?" checked":"")+(x.ok?"":" disabled")+'></td><td>'+(c?esc(x.label)+' <span class="hint">'+x.names.length+' client'+(x.names.length>1?"s":"")+': '+esc(x.names.join(", "))+'</span>':avatar(n)+esc(n))+'</td><td>'+esc(ch==="email"?emU(x):ch==="wa"?(waOf(n)?"+"+waOf(n):""):c?"Combined letter":isP(n)?"Proposal letter":"Renewal letter")+'</td><td class="st '+(x.done?"ok":x.ok?"":"no")+'">'+(x.done?"\u2713 Done":x.ok?"Pending":"Skipped \u2013 "+why(ch,n))+'</td><td>'+(!pl&&x.ok?'<button class="cbb" data-i="'+i+'">Open</button>':"")+'</td></tr>'});
+    h+='<tr><td><input type="checkbox" data-u="'+i+'"'+(x.use&&x.ok?" checked":"")+(x.ok?"":" disabled")+'></td><td>'+(c?esc(x.label)+' <span class="hint">'+x.names.length+' client'+(x.names.length>1?"s":"")+': '+esc(x.names.join(", "))+'</span>':avatar(n)+esc(n))+'</td><td>'+esc(ch==="email"?emU(x):ch==="wa"?(waOf(n)?"+"+waOf(n):""):c?"Combined letter":isP(n)?"Proposal letter":"Renewal letter")+'</td><td class="st '+(x.done?"ok":x.ok?"":"no")+'">'+(x.done?"\u2713 Done":x.ok?"Pending":"Skipped \u2013 "+why(ch,n))+'</td><td><span class="cbr">'+(!pl&&x.ok?'<button class="cbb on" data-i="'+i+'">Open</button>':"")+(c?"":["email","wa","letter"].filter(function(k){return k!==ch}).map(function(k){return'<button class="cbb'+(can1(k,n)?"":" need")+'" data-ich="'+k+'" data-i="'+i+'" title="Send '+esc(n)+' by '+CHN[k]+' instead">'+CHN[k]+"</button>"}).join(""))+'</span></td></tr>'});
   h+='</tbody></table></div><div class="bar" style="margin-top:10px">';
   h+=pl?'<button class="pri" id="bkPrn"'+(go?"":" disabled")+'>Print / Save PDF ('+go+')</button><button id="bkDoc"'+(go?"":" disabled")+'>Download Word</button>':'<button class="pri" id="bkNext"'+(left?"":" disabled")+'>Open next ('+left+' left)</button><button id="bkAll"'+(left?"":" disabled")+'>Open all</button>';
   D.innerHTML=h+'<button id="bkX2">Close</button></div>';
@@ -3126,6 +3199,9 @@ try{renderClients()}catch(e){}
 #v-board .sb b{margin-left:3px;color:var(--brand)}
 #v-board .sb.rec{background:var(--sel);color:var(--brand);border-color:var(--brand);font-weight:600}
 #v-board .sb.ed{padding:2px 8px}
+#v-board .sb{cursor:pointer;transition:background .12s,transform .08s}#v-board .sb:hover{background:var(--sel);border-color:var(--brand)}#v-board .sb:active{transform:scale(.95)}
+#v-board .sb.done{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);border-color:var(--green);font-weight:600}
+#v-board .sb.need{border-style:dashed;color:var(--mute)}#v-board .sb.need:hover{color:var(--brand)}
 #v-board .sendr{display:flex;flex-wrap:wrap;gap:4px}
 #v-board .sgw{margin-top:5px;display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap}
 #v-board .sgw .hint{margin:0;font-size:11.5px;flex:1 1 120px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
@@ -3308,5 +3384,68 @@ var _sv=showView;showView=function(v){_sv(v);if(v==="board")sched()};
 setInterval(tick,30000);setTimeout(tick,1500);sched();
 })();
 </script>
+<style>
+.aud{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 14px;background:var(--card)}
+.aud .audh{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.aud .audr{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+.aud .audr>div{flex:1;min-width:0;font-size:13px}
+.aud .audi{flex:none;width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:13px}
+.aud .audi.g{background:color-mix(in srgb,var(--ok,#107c10) 18%,transparent);color:var(--ok,#107c10)}
+.aud .audi.w{background:color-mix(in srgb,var(--amber,#b86e00) 20%,transparent);color:var(--amber,#b86e00)}
+.aud .audi svg{width:14px;height:14px}
+</style>
+<script>
+(function(){
+var rb=$("rolesBody");if(!rb)return;
+rb.addEventListener("click",function(e){
+ var f=e.target.closest("[data-fix]"),mk=e.target.closest("#rlMk");
+ if(mk){if(deny("users"))return;var u=S.users.filter(function(x){return x.id===$("rlUser").value})[0];if(!u||!confirm(ADMIN_Q(u.name)))return;u.role="admin";logIt("User","Made Admin",u.name,"");save();renderAll();toast(u.name+" is now Admin");return}
+ if(!f||deny("users"))return;
+ if(f.dataset.fix==="def"){S.policy.role="viewer";save();renderAll();toast("New users now start as Viewer")}
+ else if(f.dataset.fix==="inadm"){S.users.forEach(function(u){if(!u.on&&u.role==="admin"){u.role=demoteTo(u);logIt("User","Admin removed",u.name,"")}});save();renderAll();toast("Admin removed from inactive users")}
+});
+try{renderUsers()}catch(e){}
+})();
+</script>
+<style id="bdBarFix">
+/* Client board filter bar: one even row, equal heights, labels on every control */
+#v-board .bbar:not(#bdChips){display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.4fr);gap:12px 16px;align-items:end;margin:14px 0 10px}
+#v-board .bbar:not(#bdChips)>label{display:flex;flex-direction:column;align-items:stretch;gap:5px;margin:0;font-size:12px;font-weight:600;line-height:1.2;color:var(--mute);white-space:nowrap;min-width:0}
+#v-board .bbar:not(#bdChips)>label select,#v-board .bbar:not(#bdChips)>label input[type=search]{width:100%;max-width:none;min-width:0;flex:none;height:38px;box-sizing:border-box;margin:0;padding:0 10px;font-size:13.5px;font-weight:400;line-height:1.2;color:var(--text,inherit)}
+#v-board .bbar:not(#bdChips)>label select{text-overflow:ellipsis}
+#v-board #bdChips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 8px}
+#v-board #bdChips .jb{height:30px;display:inline-flex;align-items:center;box-sizing:border-box}
+@media(max-width:1100px){#v-board .bbar:not(#bdChips){grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:820px){#v-board .bbar:not(#bdChips){grid-template-columns:repeat(2,minmax(0,1fr))}#v-board .bbar:not(#bdChips)>label:last-child{grid-column:1 / -1}}
+@media(max-width:480px){#v-board .bbar:not(#bdChips){grid-template-columns:minmax(0,1fr)}}
+</style>
+<style id="cbBarFix">
+/* Clients page toolbar: one centred row, equal 36px controls, bulk actions pinned right */
+#clist .cbt{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:8px 0}
+#clist .cbt>*{margin:0}
+#clist .cbt input[type=search]{flex:1 1 240px;min-width:180px;max-width:320px;height:36px;box-sizing:border-box;margin:0}
+#clist .cbt label{display:flex;align-items:center;gap:8px;margin:0;font-size:13px;line-height:1.2;white-space:nowrap}
+#clist .cbt label select{width:auto;min-width:130px;height:36px;box-sizing:border-box;margin:0}
+#clist .cbt label input[type=checkbox]{width:16px;height:16px;margin:0;flex:none}
+#clist .cbt .sp{flex:1 1 0;min-width:0}
+#clist .cbsel{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-left:auto}
+#clist .cbsel .hint{margin:0;font-size:13px;line-height:1.2}
+#clist .cbsel .cbb{height:36px;min-width:36px;box-sizing:border-box;margin:0;padding:0 14px;display:inline-flex;align-items:center;justify-content:center}
+@media(max-width:760px){#clist .cbt .sp{display:none}#clist .cbt input[type=search]{flex-basis:100%;max-width:none}#clist .cbsel{margin-left:0;flex-basis:100%}}
+</style>
+<style id="cbBarFix2">
+/* Clients page: Bank + Branch boxes, group-send row */
+#clist .cbt{display:flex;flex-direction:column;gap:10px;padding:8px 0;flex-wrap:nowrap;align-items:stretch}
+#clist .cbt .cbr1{display:grid;grid-template-columns:minmax(200px,1.4fr) repeat(2,minmax(160px,1fr)) auto;gap:12px 16px;align-items:end}
+#clist .cbt .cbf{display:flex;flex-direction:column;align-items:stretch;gap:5px;margin:0;font-size:12px;font-weight:600;line-height:1.2;color:var(--mute);white-space:nowrap;min-width:0}
+#clist .cbt .cbf input[type=search],#clist .cbt .cbf select{width:100%;min-width:0;max-width:none;flex:none;height:38px;box-sizing:border-box;margin:0;padding:0 10px;font-size:13.5px;font-weight:400;color:var(--text,inherit)}
+#clist .cbt .cbck{display:flex;align-items:center;gap:8px;margin:0;height:38px;font-size:13px;white-space:nowrap}
+#clist .cbt .cbr2{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;border:1px dashed var(--line);border-radius:10px;padding:8px 12px}
+#clist .cbt .cbgs{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+#clist .cbt .cbgt{font-size:13px;margin-right:6px}#clist .cbt .cbgt b{margin:0 4px}#clist .cbt .cbgt .hint{margin:0}
+#clist .cbt .cbsel{margin-left:0}
+@media(max-width:900px){#clist .cbt .cbr1{grid-template-columns:repeat(2,minmax(0,1fr))}#clist .cbt .cbr1>.cbf:first-child{grid-column:1 / -1}}
+@media(max-width:520px){#clist .cbt .cbr1{grid-template-columns:minmax(0,1fr)}}
+</style>
 </body>
 </html>
